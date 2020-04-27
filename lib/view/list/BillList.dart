@@ -26,7 +26,8 @@ class BillListPage extends Pages{
         title: TabBar(
           controller: _tabController,
           indicatorWeight : 4,
-          // indicatorSize:TabBarIndicatorSize.label,
+          isScrollable: true,
+          indicatorSize:TabBarIndicatorSize.label,
           tabs: tabs.map((e) => Tab(text: e)).toList()
         ), 
       );
