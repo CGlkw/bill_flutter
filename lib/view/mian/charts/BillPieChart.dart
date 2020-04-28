@@ -1,26 +1,25 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
-class DonutAutoLabelChart extends StatelessWidget{
+class  DonutAutoLabelChart extends StatefulWidget{
   final List<charts.Series> seriesList;
   final bool animate;
-
   DonutAutoLabelChart(this.seriesList, {this.animate});
 
-  /// Creates a [PieChart] with sample data and no transition.
-  factory DonutAutoLabelChart.withSampleData() {
-    return new DonutAutoLabelChart(
-      _createSampleData(),
-      // Disable animations for image tests.
-      animate: false,
-    );
-  }
+  @override
+  DonutAutoLabelChartState createState() => DonutAutoLabelChartState();
+}
 
+class DonutAutoLabelChartState extends State<DonutAutoLabelChart> with AutomaticKeepAliveClientMixin{
+  
 
+  @protected
+  bool get wantKeepAlive=>true;
   @override
   Widget build(BuildContext context) {
-    return new charts.PieChart(seriesList,
-        animate: animate,
+    super.build(context);
+    return new charts.PieChart(widget. seriesList,
+        animate: widget. animate,
         behaviors: [new charts.DatumLegend()],
         // Configure the width of the pie slices to 60px. The remaining space in
         // the chart will be left as a hole in the center.
