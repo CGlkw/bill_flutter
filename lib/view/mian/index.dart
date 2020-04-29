@@ -58,32 +58,42 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> with TickerProviderStateMixin,AutomaticKeepAliveClientMixin{
 
-  TabController _tabController;
+
   List<BillChartDate> tabs;
-  int index = 0;
-  List<charts.Series> _seriesList;
+  List<TabController> _tabControllers;
+  int _firstIndex = 0;
+  int _secondIndex = 0;
 
   List<List<BillChartDate>> tabs2 = [[BillChartDate('本周',null,null)],
   [BillChartDate('本月',null,null)],
   [BillChartDate('今年',null,null)]];
 
-  Widget pieChart;
+  List<Map<int,Widget>> pieCharts = [{},{},{}];
 
   @protected
-  bool get wantKeepAlive=>true;
+  bool get wantKeepAlive=>false;
+
+  // 刷新
+  showRefreshLoading() {
+    new Future.delayed(const Duration(seconds: 0), () {
+
+      return true;
+    });
+  }
 
   @override
   void initState() {
-
-    tabs = tabs2[index];
-     _tabController = TabController(length: tabs.length, vsync: this);
+    showRefreshLoading();
      BillService().getMinMaxTime().then((value) => { 
       setState(() {    
         tabs2[0]= BillService().getWeekChartDate(value['minTime'],value['maxTime']);
         tabs2[1]= BillService().getMonthChartDate(value['minTime'],value['maxTime']);
         tabs2[2]= BillService().getYearChartDate(value['minTime'],value['maxTime']);
-        tabs = tabs2[index];
-        _tabController = TabController(length: tabs.length, vsync: this);
+        _tabControllers = new List()
+          ..add(TabController(length: tabs2[0].length, vsync: this))
+          ..add(TabController(length: tabs2[1].length, vsync: this))
+          ..add(TabController(length: tabs2[2].length, vsync: this));
+
         _createSampleData();
         
       })
@@ -99,34 +109,46 @@ class _MainState extends State<Main> with TickerProviderStateMixin,AutomaticKeep
     super.build(context);
     widget.tabController.addListener((){
       setState(() {
-        tabs = tabs2[widget.tabController.index];
-        _tabController = TabController(length: tabs.length, vsync: this);
-        _createSampleData();
+        _firstIndex = widget.tabController.index;
+        _secondIndex = _tabControllers[_firstIndex].index;
+        
       });
-    });
-    _tabController.addListener(() {
       _createSampleData();
     });
+    
     return TabBarView(
         controller: widget.tabController,
-        children: widget.tabs.map((e) { //创建3个Tab页
+        children: widget.tabs.asMap().keys.map((e1) { //创建3个Tab页
+          if(_tabControllers == null ){
+            return Center(
+              child: Container(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          _tabControllers[e1].addListener(() {
+            setState(() {
+            _secondIndex = _tabControllers[e1].index;
+            });
+            _createSampleData();
+          });
           return Column(
             children:[
               TabBar(
-                controller: _tabController,
+                controller: _tabControllers[e1],
                 isScrollable: true,
                 labelColor: Theme.of(context).primaryColor,
                 indicatorSize:TabBarIndicatorSize.label,
-                tabs: tabs.map((e) => Tab(
+                tabs: tabs2[e1].map((e) => Tab(
                   text: e.name,
                 )).toList()
               ),
               
               Expanded(
                 child: TabBarView(
-                controller: _tabController,
+                controller: _tabControllers[e1],
                 children: 
-                  tabs.map((e) {
+                  tabs2[e1].asMap().keys.map((e2) {
                     return Container(
                       alignment: Alignment.topCenter,
                       width: double.infinity,
@@ -140,7 +162,11 @@ class _MainState extends State<Main> with TickerProviderStateMixin,AutomaticKeep
                               Container(
                                 width: double.infinity,
                                 height: 300.0,
-                                child: pieChart
+                                child: pieCharts[e1][e2] ?? Center(
+                                  child: Container(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
                               )
                             ]
                           ),
@@ -161,7 +187,17 @@ class _MainState extends State<Main> with TickerProviderStateMixin,AutomaticKeep
   }
 
   void _createSampleData() {
-    BillChartDate billChartDate = tabs[_tabController.index];
+    if(pieCharts.length > 0 
+        && pieCharts[_firstIndex] !=null 
+        && pieCharts[_firstIndex].length > 0
+        && pieCharts[_firstIndex][_secondIndex] != null){
+          return;
+    }
+    _reFreshChartDate();
+  }
+
+  _reFreshChartDate(){
+    BillChartDate billChartDate = tabs2[_firstIndex][_secondIndex];
     Map<String, double> map = new Map();
     List<PieBillDate> data = [];
     Color c=  Theme.of(context).primaryColor;
@@ -187,7 +223,7 @@ class _MainState extends State<Main> with TickerProviderStateMixin,AutomaticKeep
         i++;
       }),
        setState(() {
-         _seriesList =  [new charts.Series<PieBillDate, String>(
+         var  _seriesList =  [new charts.Series<PieBillDate, String>(
             id: 'Sales',
             domainFn: (PieBillDate sales, _) => sales.type,
             measureFn: (PieBillDate sales, _) =>sales.money ,
@@ -201,17 +237,14 @@ class _MainState extends State<Main> with TickerProviderStateMixin,AutomaticKeep
             // Set a label accessor to control the text of the arc label.
             labelAccessorFn: (PieBillDate row, _) => '${row.money.toStringAsFixed(2)}',
           )];
-          pieChart = DonutAutoLabelChart(_seriesList,animate:true);
+          var pieChart = DonutAutoLabelChart(_seriesList,animate:true);
+          pieCharts[_firstIndex][_secondIndex] = pieChart;
        })
     });
-
-
-     
-    
   }
 
   Future<Null> _refresh() async {
-    _createSampleData();
+    _reFreshChartDate();
     return;
   }
 
