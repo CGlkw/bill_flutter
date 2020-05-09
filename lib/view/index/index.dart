@@ -86,7 +86,7 @@ class _ScaffoldRouteState extends State<Index> with TickerProviderStateMixin{
         padding: padding,
         child: AnimatedContainer(
           duration: Duration(seconds: 5),
-          color: Colors.white,
+          //color: Colors.white,
           child: Center(
             child: Column(
               children: <Widget>[
@@ -107,7 +107,7 @@ class _ScaffoldRouteState extends State<Index> with TickerProviderStateMixin{
     }
     Widget item = Expanded(
       flex: 1,
-      child: new GestureDetector(
+      child: new InkWell(
         onTap: () {
           if (index != _currentIndex) {
             setState(() {

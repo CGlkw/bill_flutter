@@ -1,3 +1,4 @@
+import 'package:bill/utils/DateUtils.dart';
 import 'package:bill/view/api/BillService.dart';
 import 'package:bill/view/api/module/Bill.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:bill/view/Pages.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'charts/BillPieChart.dart';
+import 'charts/BillStackedBarChart.dart';
  
 class MainPage extends Pages {
 
@@ -69,6 +71,8 @@ class _MainState extends State<Main> with TickerProviderStateMixin,AutomaticKeep
   [BillChartDate('今年',null,null)]];
 
   List<Map<int,Widget>> pieCharts = [{},{},{}];
+  List<Map<int,Widget>> stackCharts = [{},{},{}];
+
 
   @protected
   bool get wantKeepAlive=>false;
@@ -167,21 +171,26 @@ class _MainState extends State<Main> with TickerProviderStateMixin,AutomaticKeep
                                     child: CircularProgressIndicator(),
                                   ),
                                 )
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 300.0,
+                                child: stackCharts[e1][e2] ?? Center(
+                                  child: Container(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
                               )
                             ]
                           ),
                         ),
                       ),
                     );
-
                   }).toList(),
-                
                 ),
-              ),
-              
+              ),  
             ]
-          );
-            
+          );        
         }).toList(),
       );  
   }
@@ -198,48 +207,97 @@ class _MainState extends State<Main> with TickerProviderStateMixin,AutomaticKeep
 
   _reFreshChartDate(){
     BillChartDate billChartDate = tabs2[_firstIndex][_secondIndex];
+
+    BillService().getBillByDate(billChartDate.startTime, billChartDate.endTime).then((value) => {
+      _createPieChartData(value),
+      _createStackChartData(value)
+    });
+  }
+  _createStackChartData(value){
+      Map<String, List<PieBillDate>> map = new Map();
+      int i = 0;
+      if(_firstIndex == 0){
+        value.forEach((element) {
+          if(map.containsKey(element.type)){
+            map[element.type].add(PieBillDate(DateUtils.getWeekName(element.time), element.money, null));
+          }else{
+            map[element.type] = List()..add(PieBillDate(DateUtils.getWeekName(element.time), element.money, null));
+          }
+        });
+      }else if(_firstIndex == 1){
+        value.forEach((element) {
+          if(map.containsKey(element.type)){
+            map[element.type].add(PieBillDate('${element.time.day}', element.money, null));
+          }else{
+            map[element.type] = List()..add(PieBillDate('${element.time.day}', element.money, null));
+          }
+        });
+      }else{
+        value.forEach((element) {
+          if(map.containsKey(element.type)){
+            map[element.type].add(PieBillDate('${element.time.day}', element.money, null));
+          }else{
+            map[element.type] = List()..add(PieBillDate('${element.time.day}', element.money, null));
+          }
+        });
+      }
+      
+      var  _seriesList = List<charts.Series<PieBillDate, String>>();
+      map.forEach((key, value) {
+        _seriesList.add(
+          new charts.Series<PieBillDate, String>(
+            id: key,
+            domainFn: (PieBillDate sales, _) => sales.type,
+            measureFn: (PieBillDate sales, _) => sales.money,
+            data: value,
+          ),);
+      });
+    setState(() {
+      var stackChart = StackedBarChart(_seriesList,animate:true);
+      stackCharts[_firstIndex][_secondIndex] = stackChart;
+    });
+  }
+  _createPieChartData(value){
     Map<String, double> map = new Map();
     List<PieBillDate> data = [];
     Color c=  Theme.of(context).primaryColor;
     int i = 0;
-    BillService().getBillByDate(billChartDate.startTime, billChartDate.endTime).then((value) => {
-      value.forEach((element) {
-        if(map.containsKey(element.type)){
-          map[element.type] += element.money;
-        }else{
-          map[element.type] = element.money;
-        }
-      }),
-      
-      map.forEach((key, value) {
-        data.add(PieBillDate(key, value, 
-          charts.Color(
-              r:c.red,
-              g:c.green,
-              b:c.blue,
-              a:int.parse(((map.length - i) /map.length * 255).toStringAsFixed(0))
-            )
-        ));
-        i++;
-      }),
-       setState(() {
-         var  _seriesList =  [new charts.Series<PieBillDate, String>(
-            id: 'Sales',
-            domainFn: (PieBillDate sales, _) => sales.type,
-            measureFn: (PieBillDate sales, _) =>sales.money ,
-            seriesColor: charts.Color(
-              r:Colors.red.red,
-              g:Colors.red.green,
-              b:Colors.red.blue
-            ),
-             colorFn: (PieBillDate sales, _) => sales.color,
-            data: data,
-            // Set a label accessor to control the text of the arc label.
-            labelAccessorFn: (PieBillDate row, _) => '${row.money.toStringAsFixed(2)}',
-          )];
-          var pieChart = DonutAutoLabelChart(_seriesList,animate:true);
-          pieCharts[_firstIndex][_secondIndex] = pieChart;
-       })
+    value.forEach((element) {
+      if(map.containsKey(element.type)){
+        map[element.type] += element.money;
+      }else{
+        map[element.type] = element.money;
+      }
+    });
+    
+    map.forEach((key, value) {
+      data.add(PieBillDate(key, value, 
+        charts.Color(
+            r:c.red,
+            g:c.green,
+            b:c.blue,
+            a:int.parse(((map.length - i) /map.length * 255).toStringAsFixed(0))
+          )
+      ));
+      i++;
+    });
+    setState(() {
+      var  _seriesList =  [new charts.Series<PieBillDate, String>(
+        id: 'Sales',
+        domainFn: (PieBillDate sales, _) => sales.type,
+        measureFn: (PieBillDate sales, _) =>sales.money ,
+        seriesColor: charts.Color(
+          r:Colors.red.red,
+          g:Colors.red.green,
+          b:Colors.red.blue
+        ),
+        colorFn: (PieBillDate sales, _) => sales.color,
+        data: data,
+        // Set a label accessor to control the text of the arc label.
+        labelAccessorFn: (PieBillDate row, _) => '${row.money.toStringAsFixed(2)}',
+      )];
+      var pieChart = DonutAutoLabelChart(_seriesList,animate:true);
+      pieCharts[_firstIndex][_secondIndex] = pieChart;
     });
   }
 

@@ -2,6 +2,12 @@
 	"id": 1.1,
 	"type": "购物","icon": "icon-gouwu",
 	"remark": "remark1",
+	"time": "2020-05-09",
+	"money": "123.55"
+},{
+	"id": 1.1,
+	"type": "购物","icon": "icon-gouwu",
+	"remark": "remark1",
 	"time": "2020-04-08",
 	"money": "53.33"
 },{

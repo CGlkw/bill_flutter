@@ -20,7 +20,6 @@ class StackedBarChartStatr extends State<StackedBarChart> {
     return new charts.BarChart(
       widget.seriesList,
       animate: widget.animate,
-      behaviors: [new charts.DatumLegend()],
       barGroupingType: charts.BarGroupingType.stacked,
     );
   }
