@@ -8,9 +8,9 @@ import 'package:bill/view/api/module/Bill.dart';
 List<Bill> billDate;
 
 
-// 读取 assets 文件夹中的 person.json 文件
+// 读取 assets 文件夹中的 person.json 文件s
 Future<String> _loadPersonJson() async {
-  return await rootBundle.loadString('json/bill.json');
+  return await rootBundle.loadString('json_data/bill.json');
 }
 
 // 将 json 字符串解析为 Person 对象
