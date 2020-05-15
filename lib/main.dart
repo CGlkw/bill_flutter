@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:bill/common/Global.dart';
 import 'package:bill/routes/Routes.dart';
 import 'package:provider/provider.dart';
+//Global.init().then((e) => runApp(MyApp()));
 
-void main() => runApp(MyApp());
+void main() =>  runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
