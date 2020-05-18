@@ -22,9 +22,4 @@ class VedioList {
     
     factory VedioList.fromJson(Map<String,dynamic> json) => _$VedioListFromJson(json);
     Map<String, dynamic> toJson() => _$VedioListToJson(this);
-    @override
-  String toString() {
-    // TODO: implement toString
-    return toJson().toString();
-  }
 }

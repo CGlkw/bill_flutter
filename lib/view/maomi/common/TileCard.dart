@@ -1,3 +1,4 @@
+import 'package:bill/view/maomi/player/playui.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,15 +8,14 @@ class TileCard extends StatelessWidget {
   final String title;
   final String author;
   final String authorUrl;
-  final String type;
-  final double worksAspectRatio;
+  final String mvId;
   TileCard(
       {this.img,
       this.title,
       this.author,
       this.authorUrl,
-      this.type,
-      this.worksAspectRatio});
+      this.mvId
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,16 @@ class TileCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Container(
-            color: Colors.deepOrange,
-            child: CachedNetworkImage(
-              imageUrl: '$img'
-            ),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => Player(mvId)));
+            },
+            child:Container(
+              color: Colors.deepOrange,
+              child: CachedNetworkImage(
+                imageUrl: '$img'
+              ),
+            )
           ),
           Container(
             padding:
@@ -50,11 +55,11 @@ class TileCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: NetworkImage('$authorUrl'),
-                  radius: ScreenUtil().setWidth(30),
-                  // maxRadius: 40.0,
-                ),
+                // CircleAvatar(
+                //   backgroundImage: NetworkImage('$authorUrl'),
+                //   radius: ScreenUtil().setWidth(30),
+                //   // maxRadius: 40.0,
+                // ),
                 Container(
                   margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
                   width: ScreenUtil().setWidth(250),
@@ -65,15 +70,6 @@ class TileCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: ScreenUtil().setWidth(80)),
-                  child: Text(
-                    '${type == 'EXISE' ? '练习' : '其他'}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(25),
-                    ),
-                  ),
-                )
               ],
             ),
           )

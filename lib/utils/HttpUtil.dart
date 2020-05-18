@@ -29,7 +29,7 @@ class HttpUtil {
     sign = sign.substring(1);
     d['sig'] = generateMd5(sign + 'maomi_pass_xyz');
 
-    return await dio.post(test + url,data: d, options: new Options(contentType:"application/x-www-form-urlencoded",headers:{'Origin':'http://150.109.45.166:8099','Referer':'http://150.109.45.166:8099'}));
+    return await dio.post(host + url,data: d, options: new Options(contentType:"application/x-www-form-urlencoded",headers:{'Origin':'http://150.109.45.166:8099','Referer':'http://150.109.45.166:8099'}));
   }
 
   static String generateMd5(String data) {

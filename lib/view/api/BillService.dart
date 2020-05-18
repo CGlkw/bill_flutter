@@ -2,15 +2,11 @@ import 'dart:convert';
 
 import 'package:bill/models/index.dart';
 import 'package:bill/utils/AesUtil.dart';
-import 'package:bill/utils/HttpUtil.dart';
 import 'package:bill/utils/TimeMachineUtil.dart';
 import 'package:bill/view/api/HostListService.dart';
-import 'package:cipher2/cipher2.dart';
 import 'package:common_utils/common_utils.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:bill/view/api/module/Bill.dart';
-import 'package:steel_crypt/steel_crypt.dart';
 
 List<Bill> billDate;
 
@@ -88,8 +84,8 @@ class BillService{
   }
 
   List<BillChartDate> getWeekChartDate(DateTime startTime, DateTime endTime){
-  
-
+    var s = HostListService().getDetail("2337553");
+    print(s);
     assert(startTime != null);
     DateTime now = DateTime.now();
     endTime = endTime ?? now;
