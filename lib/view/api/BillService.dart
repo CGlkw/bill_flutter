@@ -1,9 +1,16 @@
 import 'dart:convert';
 
+import 'package:bill/models/index.dart';
+import 'package:bill/utils/AesUtil.dart';
+import 'package:bill/utils/HttpUtil.dart';
 import 'package:bill/utils/TimeMachineUtil.dart';
+import 'package:bill/view/api/HostListService.dart';
+import 'package:cipher2/cipher2.dart';
 import 'package:common_utils/common_utils.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:bill/view/api/module/Bill.dart';
+import 'package:steel_crypt/steel_crypt.dart';
 
 List<Bill> billDate;
 
@@ -36,6 +43,8 @@ class BillService{
   Future<List<Bill>> getBillList({page:1}) async {
     List<Bill> bills= await decodeBill();
     
+    List<VedioList> res = await HostListService().getHostList(1);
+    print(res);
     int start = (page - 1 ) * pageSize;
     int end = page * pageSize;
 
@@ -43,6 +52,16 @@ class BillService{
     end = end >= (bills.length - 1) ? bills.length : end;
     return bills.sublist(start , end);
   }
+
+  List<int> hexTobytes (String hex){
+    List<int> result = [];
+    for(int i = 0; i < hex.length; i+= 2){
+      String s = hex.substring(i,i + 2);
+      result.add(int.parse(s, radix: 16));
+    }
+    return result;
+  }
+
 
   Future<List<List<String>>> getBillChartDate() async {
     Map<String, DateTime> minMaxTime = await getMinMaxTime();
@@ -69,6 +88,8 @@ class BillService{
   }
 
   List<BillChartDate> getWeekChartDate(DateTime startTime, DateTime endTime){
+  
+
     assert(startTime != null);
     DateTime now = DateTime.now();
     endTime = endTime ?? now;

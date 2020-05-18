@@ -32,6 +32,11 @@ class MyDrawer extends StatelessWidget {
                     title: Text('theme'),
                     onTap: () => Navigator.pushNamed(context, "themes"),
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.hearing),
+                    title: Text('maomi'),
+                    onTap: () => Navigator.pushNamed(context, "maomi"),
+                  ),
                 ],
               ),
             ),

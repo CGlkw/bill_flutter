@@ -1,4 +1,5 @@
 
+import 'package:bill/view/maomi/index.dart';
 import 'package:flutter/material.dart';
 import 'package:bill/view/add/BillAdd.dart';
 import 'package:bill/view/index/index.dart';
@@ -15,6 +16,7 @@ class Routes{
       '/' : (context) => Index(),
       'bill_add' : (context) => BillAdd(),
       'themes': (context) => ThemeChangeRoute(),
+      'maomi': (context) => Maomi(),
     };
   }
 }

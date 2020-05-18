@@ -20,7 +20,13 @@ class _BillAddState extends State<BillAdd>{
     {'icon':'haitan','name':'旅游'},
   ];
 
+  int selectIndex = -1;
+
+  bool isShow = false;
+
   List<Widget> iconButtons = [];
+
+  BuildContext _context;
 
   @override
   void initState() {
@@ -30,6 +36,7 @@ class _BillAddState extends State<BillAdd>{
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return Scaffold(
       appBar: AppBar(
         title: Text('Bill Add')
@@ -45,14 +52,26 @@ class _BillAddState extends State<BillAdd>{
         )
       )
     );
+    
   }
 
+  Widget _buildBottomSheet() => BottomSheet(
+    onClosing: () => {selectIndex = -1}, 
+    builder: (_) => (Container(
+        height: 300.0,
+        child: selectIndex != -1? Icon(BillIcons.all[icon[selectIndex]['icon']],size: 40,) : null,
+    ))
+  );
+
   _iconInit(){
+    int i = 0;
     icon.forEach((element) {
       iconButtons.add(
         InkWell(
           onTap: () {
-            
+            selectIndex = i;
+            isShow = !isShow;
+            isShow ?Scaffold.of(_context).showBottomSheet((context) => _buildBottomSheet()) : Navigator.of(_context).pop();
           },
           child:Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -63,6 +82,7 @@ class _BillAddState extends State<BillAdd>{
           ),
         )
       );
+      i++;
     });
   }
 }
