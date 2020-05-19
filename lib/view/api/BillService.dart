@@ -39,23 +39,12 @@ class BillService{
   Future<List<Bill>> getBillList({page:1}) async {
     List<Bill> bills= await decodeBill();
     
-    List<VedioList> res = await HostListService().getHostList(1);
-    print(res);
     int start = (page - 1 ) * pageSize;
     int end = page * pageSize;
 
     start = start >= (bills.length - 1) ? bills.length : start;
     end = end >= (bills.length - 1) ? bills.length : end;
     return bills.sublist(start , end);
-  }
-
-  List<int> hexTobytes (String hex){
-    List<int> result = [];
-    for(int i = 0; i < hex.length; i+= 2){
-      String s = hex.substring(i,i + 2);
-      result.add(int.parse(s, radix: 16));
-    }
-    return result;
   }
 
 
@@ -84,8 +73,7 @@ class BillService{
   }
 
   List<BillChartDate> getWeekChartDate(DateTime startTime, DateTime endTime){
-    var s = HostListService().getDetail("2337553");
-    print(s);
+
     assert(startTime != null);
     DateTime now = DateTime.now();
     endTime = endTime ?? now;

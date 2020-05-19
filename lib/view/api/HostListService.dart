@@ -21,7 +21,9 @@ class HostListService{
     Map resultMap = json.decode(result) as Map;
     if(resultMap['code'] as num == 0 ){
       List result = resultMap['data']['list'] as List;
-      return  result.map((e) => VedioList.fromJson(e)).toList();
+      return  result.where((element) => element['is_cat_ads'] == 0)
+                    .map((e) => VedioList.fromJson(e))
+                    .toList();
     }
 
     return null;

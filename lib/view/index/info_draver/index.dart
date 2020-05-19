@@ -1,3 +1,4 @@
+import 'package:bill/view/maomi/player/playui.dart';
 import 'package:flutter/material.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -12,36 +13,50 @@ class MyDrawer extends StatelessWidget {
         context: context,
         //移除抽屉菜单顶部默认留白
         removeTop: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: <Widget>[
-            _buildHeader(context),
-            Expanded(
-              child: ListView(
-                children: <Widget>[
-                  ListTile(
-                    leading: const Icon(Icons.add),
-                    title: const Text('Add account'),
+            
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildHeader(context),
+                Expanded(
+                  child: ListView(
+                    children: <Widget>[
+                      ListTile(
+                        leading: const Icon(Icons.add),
+                        title: const Text('Add account'),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.settings),
+                        title: const Text('Manage accounts'),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.color_lens),
+                        title: Text('theme'),
+                        onTap: () => Navigator.pushNamed(context, "themes"),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.color_lens),
+                        title: Text('theme'),
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Player("1111"))),
+                      ),
+                    ],
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.settings),
-                    title: const Text('Manage accounts'),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.color_lens),
-                    title: Text('theme'),
-                    onTap: () => Navigator.pushNamed(context, "themes"),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.hearing),
-                    title: Text('maomi'),
-                    onTap: () => Navigator.pushNamed(context, "maomi"),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+            Positioned(
+             right: 5,
+             top: 5,
+             child: IconButton(
+              icon: Icon(Icons.favorite, color: Theme.of(context).primaryColor,),
+              
+              onPressed: () => Navigator.pushNamed(context, "maomi"),
+            ) 
+           ),
+          ]
+        )
       ),
     );
   }
@@ -69,7 +84,8 @@ class MyDrawer extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
-            )
+            ),
+                    
           ],
         ),
       ),

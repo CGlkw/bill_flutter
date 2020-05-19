@@ -1,10 +1,10 @@
+import 'dart:ui';
 
-
+import 'package:bill/common/BillPlayer.dart';
 import 'package:bill/models/index.dart';
 import 'package:bill/view/api/HostListService.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
 class Player extends StatefulWidget{
 
@@ -17,74 +17,63 @@ class Player extends StatefulWidget{
 }
 
 class PlayerState extends State<Player>{
-  VideoPlayerController _controller ;
-    bool _isPlaying = false;
-    String url = '';
-    VedioDetail detail = VedioDetail();
-
-
+    VedioDetail detail;
     @override
     void initState() {
-        super.initState();
-        HostListService().getDetail(widget.mvId).then((value) => {
-            
-            setState(() {
-              detail = value;
-            }),
-            url = value.mv_play_url,
-            _controller = VideoPlayerController.network(this.url)
-            // 播放状态
-            ..addListener(() {
-                print(url);
-                final bool isPlaying = _controller.value.isPlaying;
-                if (isPlaying != _isPlaying) {
-                    setState(() { _isPlaying = isPlaying; });
-                }
-            })
-            
-            // 在初始化完成后必须更新界面
-            ..initialize().then((_) {
-                setState(() {});
-            })
-       
-        });
-        
+      super.initState();
+      // HostListService().getDetail(widget.mvId).then((value) => {           
+      //   setState(() {
+      //     detail = value;
+      //   }),
+      // }); 
+      detail = new VedioDetail();
+      
+      setState(() {
+        detail.mv_img_url = "https://pic1.zhimg.com/v2-664e58f90e12b9263d6c29a7cd8eb202_1200x500.jpg";
+      detail.mv_play_url = "https://player.youku.com/embed/XNDY3MjAzNTk3Ng==?client_id=f7d81b29f4146ce2";
+      });    
     }
 
-    @override
-    Widget build(BuildContext context) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Bill Add')
-          ),
-          body: new Center(
-          child: _controller != null && _controller.value.initialized
-            // 加载成功
-            ? new AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-            ) : new Container(
-              child: detail.mv_img_url != null ?CachedNetworkImage(
-                imageUrl: detail.mv_img_url,
-              ) : null
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Momi')
+      ),
+      body:
+
+          detail == null ? 
+      Center(
+        child: Container(
+          child: CircularProgressIndicator(),
+        ),
+      ) : 
+      Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          Image.network(
+              "https://pic1.zhimg.com/v2-664e58f90e12b9263d6c29a7cd8eb202_1200x500.jpg",
+              fit: BoxFit.cover,
             ),
-          ),
-          floatingActionButton: new FloatingActionButton(
-              onPressed: _controller != null ? _controller.value.isPlaying
-                  ? _controller.pause
-                  : _controller.play : null,
-              child: _controller != null ? new Icon(
-                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-              ) : new Container(),
-          ),           
-        );
-    }
-    
-    @override
-  void dispose() {
-    if(_controller != null){
-      _controller.pause();
-    }
-    super.dispose();
+          // CachedNetworkImage(
+          //   imageUrl:"https://pic1.zhimg.com/v2-664e58f90e12b9263d6c29a7cd8eb202_1200x500.jpg",
+          //    fit: BoxFit.cover,
+          // ),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            child:BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: 20,
+                sigmaY: 20,
+              ),
+              child: Center(
+                child: BillPlayer(detail.mv_play_url),
+              ),
+            ),
+          ) 
+        ]
+      )        
+    );
   }
 }
