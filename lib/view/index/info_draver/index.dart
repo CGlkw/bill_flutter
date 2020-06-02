@@ -1,3 +1,4 @@
+import 'package:bill/view/comment/index.dart';
 import 'package:bill/view/maomi/player/playui.dart';
 import 'package:flutter/material.dart';
 
@@ -40,6 +41,11 @@ class MyDrawer extends StatelessWidget {
                         leading: const Icon(Icons.color_lens),
                         title: Text('theme'),
                         onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Player("1111"))),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.color_lens),
+                        title: Text('Comment'),
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CommentPage())),
                       ),
                     ],
                   ),

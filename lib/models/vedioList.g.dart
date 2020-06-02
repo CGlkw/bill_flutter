@@ -15,7 +15,7 @@ VedioList _$VedioListFromJson(Map<String, dynamic> json) {
     ..mv_play_url = json['mv_play_url'] as String
     ..mv_play_width = json['mv_play_width'] as String
     ..mv_play_height = json['mv_play_height'] as String
-    ..mv_like = json['mv_like'].toString()
+    ..mv_like = json['mv_like'] as String
     ..mv_comment = json['mv_comment'] as String
     ..mv_created = json['mv_created'] as String
     ..mu_avatar = json['mu_avatar'] as String
