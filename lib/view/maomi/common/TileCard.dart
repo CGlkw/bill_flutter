@@ -6,15 +6,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TileCard extends StatelessWidget {
   final String img;
   final String title;
-  final String author;
+  final String like;
   final String authorUrl;
   final String mvId;
+  final String height;
+  final String width;
   TileCard(
       {this.img,
       this.title,
-      this.author,
+      this.like,
       this.authorUrl,
-      this.mvId
+      this.mvId,
+      this.height,
+      this.width
       });
 
   @override
@@ -31,7 +35,7 @@ class TileCard extends StatelessWidget {
             child:Container(
               color: Colors.deepOrange,
               child: CachedNetworkImage(
-                imageUrl: '$img'
+                imageUrl: '$img',
               ),
             )
           ),
@@ -49,22 +53,17 @@ class TileCard extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(
-                left: ScreenUtil().setWidth(20),
-                bottom: ScreenUtil().setWidth(20)),
+            // padding: EdgeInsets.only(
+            //     left: ScreenUtil().setWidth(20),
+            //     bottom: ScreenUtil().setWidth(20)),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                // CircleAvatar(
-                //   backgroundImage: NetworkImage('$authorUrl'),
-                //   radius: ScreenUtil().setWidth(30),
-                //   // maxRadius: 40.0,
-                // ),
+                Icon(Icons.favorite,color: Colors.red,size: 15,),
                 Container(
-                  margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
-                  width: ScreenUtil().setWidth(250),
+                  margin: EdgeInsets.only(left: ScreenUtil().setWidth(20),right: 5),
                   child: Text(
-                    '$author',
+                    '$like',
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(25),
                     ),

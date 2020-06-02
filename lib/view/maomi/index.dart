@@ -1,4 +1,5 @@
 import 'package:bill/models/index.dart';
+import 'package:bill/models/vedioList.dart';
 import 'package:bill/view/api/HostListService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,9 +55,11 @@ class GridPageState extends State<Maomi>  {
               itemBuilder: (context, index) => TileCard(
                     img: posts[index].mv_img_url,
                     title: posts[index].mv_title,
-                    author: posts[index].mv_like,
+                    like: posts[index].mv_like,
                     authorUrl: posts[index].mv_img_url,
                     mvId: posts[index].mv_id,
+                    height: posts[index].mv_play_height,
+                    width: posts[index].mv_play_width
                   ),
               staggeredTileBuilder: (index) => StaggeredTile.fit(2),
             

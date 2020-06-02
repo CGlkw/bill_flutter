@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:bill/models/index.dart';
+import 'package:bill/models/comment.dart';
+import 'package:bill/models/vedioDetail.dart';
 import 'package:bill/models/vedioList.dart';
 import 'package:bill/utils/AesUtil.dart';
 import 'package:bill/utils/HttpUtil.dart';
@@ -25,7 +26,6 @@ class HostListService{
                     .map((e) => VedioList.fromJson(e))
                     .toList();
     }
-
     return null;
   }
 
@@ -43,6 +43,26 @@ class HostListService{
     Map resultMap = json.decode(result) as Map;
     if(resultMap['code'] as num == 0 ){
       return VedioDetail.fromJson(resultMap['data']);
+    }
+    return null;
+  }
+
+  Future<List<Comment>> getComments(String mvId,int page) async {
+    Map param = new Map()..addAll({
+      '"mvId"':mvId,
+      '"perPage"':20,
+      '"page"':page
+    });
+    print(param.toString());
+    var data = AesUtil.encode(param.toString());
+    Response response = await HttpUtil.post('/api/community/listComments', {'data':data});
+    var result = AesUtil.decode(response.data);
+    print(result);
+    Map resultMap = json.decode(result) as Map;
+    if(resultMap['code'] as num == 0 ){
+      List result = resultMap['data']['list'] as List;
+      return  result.map((e) => Comment.fromJson(e))
+                    .toList();
     }
     return null;
   }

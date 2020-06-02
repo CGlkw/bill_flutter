@@ -14,7 +14,7 @@ class BillPlayer extends StatefulWidget {
   _BillPlayerState createState() => _BillPlayerState();
 }
 
-class _BillPlayerState extends State<BillPlayer> {
+class _BillPlayerState extends State<BillPlayer> with AutomaticKeepAliveClientMixin{
 
  VideoPlayerController videoPlayerController;
   ChewieController chewieController;
@@ -47,8 +47,11 @@ class _BillPlayerState extends State<BillPlayer> {
      * 当页面销毁的时候，将视频播放器也销毁
      * 否则，当页面销毁后会继续播放视频！
      */
+    print("播放器销毁");
     videoPlayerController.dispose();
     chewieController.dispose();
     super.dispose();
   }
+   @override
+  bool get wantKeepAlive => true;
 }
