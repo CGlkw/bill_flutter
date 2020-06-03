@@ -103,7 +103,6 @@ class TimeMachineUtil {
 
     mapTime['monDay'] = DateUtil.formatDate(
         DateTime.fromMillisecondsSinceEpoch(sunDay ),
-        isUtc: true,
         format: 'yyyy-MM-dd'); //周一 时间格式化
     mapTime['sunDay'] = DateUtil.formatDate(
         DateTime.fromMillisecondsSinceEpoch(monDay ),
@@ -121,7 +120,7 @@ class TimeMachineUtil {
     DateTime now = new DateTime.now();
     DateTime sixtyDaysFromNow = now.add(new Duration(days: day));
     String formattedDate = DateUtil.formatDate(sixtyDaysFromNow,
-        isUtc: true, format: 'yyyy-MM-dd');
+        format: 'yyyy-MM-dd');
     if (phase) {
       newHours = formattedDate + ' 00:00:00';
     } else {
@@ -130,7 +129,7 @@ class TimeMachineUtil {
 
     DateTime newDate = DateTime.parse(newHours);
     String newFormattedDate = DateUtil.formatDate(newDate,
-        isUtc: true, format: 'yyyy-MM-dd HH:mm:ss');
+        format: 'yyyy-MM-dd HH:mm:ss');
     int timeStamp = newDate.millisecondsSinceEpoch ;
     // print('时间' + newFormattedDate);
     return timeStamp;

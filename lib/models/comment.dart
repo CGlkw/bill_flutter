@@ -35,11 +35,17 @@ class Comment {
     num isSignin;
     num level;
     String levelName;
-    List reply;
+    List<Comment> reply;
     String replyUserName;
     num replyUserIsAuthor;
     num isAuthor;
     
     factory Comment.fromJson(Map<String,dynamic> json) => _$CommentFromJson(json);
     Map<String, dynamic> toJson() => _$CommentToJson(this);
+
+    @override
+  String toString() {
+    // TODO: implement toString
+    return this.toJson().toString();
+  }
 }

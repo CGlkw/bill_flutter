@@ -12,7 +12,7 @@ Comment _$CommentFromJson(Map<String, dynamic> json) {
     ..mv_id = json['mv_id'] as String
     ..mc_parent_id = json['mc_parent_id'] as String
     ..mu_id = json['mu_id'] as String
-    ..mc_reply_uid = json['mc_reply_uid'] as String
+    ..mc_reply_uid = json['mc_reply_uid'].toString()
     ..mc_text = json['mc_text'] as String
     ..mc_praises = json['mc_praises'] as String
     ..mc_reply_count = json['mc_reply_count'] as String
@@ -37,7 +37,6 @@ Comment _$CommentFromJson(Map<String, dynamic> json) {
     ..isSignin = json['isSignin'] as num
     ..level = json['level'] as num
     ..levelName = json['levelName'] as String
-    ..reply = json['reply'] as List
     ..replyUserName = json['replyUserName'] as String
     ..replyUserIsAuthor = json['replyUserIsAuthor'] as num
     ..isAuthor = json['isAuthor'] as num;

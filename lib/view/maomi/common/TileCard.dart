@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bill/view/maomi/player/playui.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +11,16 @@ class TileCard extends StatelessWidget {
   final String like;
   final String authorUrl;
   final String mvId;
-  final String height;
-  final String width;
+  final double height;
+  final double width;
+
+  List<Color> colors = [Colors.deepOrange,
+    Color.fromARGB(255, 113, 175, 164),
+    Color.fromARGB(255, 170, 138, 87),
+    Color.fromARGB(255, 89, 61, 67),
+    Color.fromARGB(255, 178, 190, 126),
+    Color.fromARGB(255, 227, 160, 93),];
+
   TileCard(
       {this.img,
       this.title,
@@ -33,9 +43,11 @@ class TileCard extends StatelessWidget {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => Player(mvId)));
             },
             child:Container(
-              color: Colors.deepOrange,
+              color: colors[Random().nextInt(colors.length)],
               child: CachedNetworkImage(
                 imageUrl: '$img',
+                width: ScreenUtil.screenWidthDp / 2 - 4,
+                height: height * ((ScreenUtil.screenWidthDp / 2 - 4) / width),
               ),
             )
           ),

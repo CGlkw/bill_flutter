@@ -210,7 +210,5 @@ class _BillListState extends State<BillList>{
         ),
       )
     );
-    
-    
   }
 }

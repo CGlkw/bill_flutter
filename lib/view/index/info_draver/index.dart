@@ -1,5 +1,6 @@
 import 'package:bill/view/comment/index.dart';
 import 'package:bill/view/maomi/player/playui.dart';
+import 'package:bill/view/staggeredGridView/index.dart';
 import 'package:flutter/material.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -41,6 +42,16 @@ class MyDrawer extends StatelessWidget {
                         leading: const Icon(Icons.color_lens),
                         title: Text('theme'),
                         onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Player("1111"))),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.color_lens),
+                        title: Text('comment'),
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CommentPage())),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.color_lens),
+                        title: Text('comment'),
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Staggered())),
                       ),
                     ],
                   ),

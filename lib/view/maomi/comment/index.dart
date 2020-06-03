@@ -1,14 +1,13 @@
 
-import 'package:bill/models/OscProjectCommentRefer.dart';
 import 'package:bill/models/comment.dart';
-import 'package:bill/utils/StringUtils.dart';
 import 'package:bill/view/api/CommentService.dart';
-import 'package:bill/view/comment/CommentItem.dart';
-import 'package:bill/view/comment/CommentReferWidget.dart';
+import 'package:bill/view/api/HostListService.dart';
+import 'package:bill/view/maomi/comment/CommentItem.dart';
 import 'package:flutter/material.dart';
 
 class CommentPage extends StatefulWidget{
-  CommentPage();
+  String _mvId;
+  CommentPage(this._mvId);
   @override
   State<StatefulWidget> createState() => _CommentPageState();
 
@@ -26,7 +25,8 @@ class _CommentPageState extends State<CommentPage> with AutomaticKeepAliveClient
 
    // 加载数据
   void _loadData(int page) {
-    CommentService().getCommentList().then((value) => {
+
+    HostListService().getComments(widget._mvId, _page).then((value) => {
       setState(() {
         _data.addAll(value) ;
       })
@@ -77,33 +77,28 @@ class _CommentPageState extends State<CommentPage> with AutomaticKeepAliveClient
   @override
   Widget build(BuildContext context) {
     
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Comment')
-      ),
-      body:Container(
-        alignment: Alignment.center,
-        child: RefreshIndicator(
-          key: _refreshKey,
-          onRefresh: _onRefresh,
-          child: ListView.separated(
-            controller: _scrollController,
-            padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemBuilder: (buildContext, index) {
-              return items(context, index);
-            },
-            itemCount: _data.isEmpty ? 0 : _data.length+1,
-            separatorBuilder: (buildContext, index) {
-              return Divider(
-                height: 0.5,
-                color: Colors.grey,
-              );
-            },
-          ),      
+    return Container(
+      alignment: Alignment.center,
+      child: RefreshIndicator(
+        key: _refreshKey,
+        onRefresh: _onRefresh,
+        child: ListView.separated(
+          controller: _scrollController,
+          padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemBuilder: (buildContext, index) {
+            return items(context, index);
+          },
+          itemCount: _data.isEmpty ? 0 : _data.length+1,
+          separatorBuilder: (buildContext, index) {
+            return Divider(
+              height: 0.5,
+              color: Colors.grey,
+            );
+          },
         ),
       ),
-    ); 
+    );
   }
 
   // item控件

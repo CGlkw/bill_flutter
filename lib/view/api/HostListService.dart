@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:bill/models/comment.dart';
 import 'package:bill/models/vedioDetail.dart';
 import 'package:bill/models/vedioList.dart';
@@ -26,6 +25,7 @@ class HostListService{
                     .map((e) => VedioList.fromJson(e))
                     .toList();
     }
+
     return null;
   }
 
@@ -61,8 +61,17 @@ class HostListService{
     Map resultMap = json.decode(result) as Map;
     if(resultMap['code'] as num == 0 ){
       List result = resultMap['data']['list'] as List;
-      return  result.map((e) => Comment.fromJson(e))
-                    .toList();
+      List<Comment> comments = [];
+      result.forEach((element) {
+        List reply = element["reply"] as List;
+        Comment re = Comment.fromJson(element);
+        if(reply != null && reply.length > 0){
+          re.reply = reply.map((e) =>  Comment.fromJson(e)).toList();
+        }
+        comments.add(re);
+      });
+      return comments;
+
     }
     return null;
   }

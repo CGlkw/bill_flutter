@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:bill/common/BillPlayer.dart';
-import 'package:bill/models/index.dart';
 import 'package:bill/models/vedioDetail.dart';
 import 'package:bill/view/api/HostListService.dart';
+import 'package:bill/view/maomi/comment/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -70,18 +70,18 @@ class PlayerState extends State<Player> with TickerProviderStateMixin{
                         Container(
                           width: double.infinity,
                           child: AppBar(
-                            title: Text('MaoMi'),
-                            elevation: 0,
-                            backgroundColor: Colors.transparent,
-                          )
-                        ),
-                        TabBar(
+                            title: TabBar(
                               controller:tabController,
                               tabs: [
                                 Tab(text:"视频"),
                                 Tab(text:"评论"),
                               ],
                             ),
+                            elevation: 0,
+                            backgroundColor: Colors.transparent,
+                          )
+                        ),
+
                         Expanded(
                           child: TabBarView(
                             controller:tabController,
@@ -89,8 +89,7 @@ class PlayerState extends State<Player> with TickerProviderStateMixin{
                               Center(
                                 child:BillPlayer(detail.mv_play_url,detail.mv_play_width,detail.mv_play_height),
                               ),
-                              
-                              CommentPage(),
+                              CommentPage(widget.mvId),
                             ]
                           ),
                         )
@@ -100,7 +99,7 @@ class PlayerState extends State<Player> with TickerProviderStateMixin{
             ),
           ]
         )
-      )        
+      )
     );
   }
 }
@@ -132,34 +131,6 @@ class _VedioPageState extends State<VedioPage> with AutomaticKeepAliveClientMixi
     super.build(context);
     return  BillPlayer(widget.url,widget.mv_play_width,widget.mv_play_height);
            
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-}
-
-class CommentPage extends StatefulWidget {
-
-
-  @override
-  State<StatefulWidget> createState() {
-    return _CommentPageState();
-  }
-}
-
-class _CommentPageState extends State<CommentPage> with AutomaticKeepAliveClientMixin {
-  @override
-  void initState() {
-    super.initState();
-    print("VedioPage init");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return Center(
-            child: Text("评论"),
-          );
   }
 
   @override

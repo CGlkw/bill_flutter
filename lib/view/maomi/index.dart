@@ -58,8 +58,8 @@ class GridPageState extends State<Maomi>  {
                     like: posts[index].mv_like,
                     authorUrl: posts[index].mv_img_url,
                     mvId: posts[index].mv_id,
-                    height: posts[index].mv_play_height,
-                    width: posts[index].mv_play_width
+                    height: double.parse(posts[index].mv_play_height),
+                    width: double.parse(posts[index].mv_play_width)
                   ),
               staggeredTileBuilder: (index) => StaggeredTile.fit(2),
             
