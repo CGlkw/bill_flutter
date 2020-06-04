@@ -46,8 +46,8 @@ class TileCard extends StatelessWidget {
               color: colors[Random().nextInt(colors.length)],
               child: CachedNetworkImage(
                 imageUrl: '$img',
-                width: ScreenUtil.screenWidthDp / 2 - 4,
-                height: height * ((ScreenUtil.screenWidthDp / 2 - 4) / width),
+                width: ScreenUtil.screenWidthDp / 2 - 6,
+                height: height * ((ScreenUtil.screenWidthDp / 2 - 6) / width),
               ),
             )
           ),

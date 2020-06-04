@@ -28,13 +28,7 @@ class PlayerState extends State<Player> with TickerProviderStateMixin{
         setState(() {
           detail = value;
         }),
-      }); 
-      // detail = new VedioDetail();
-      
-      // setState(() {
-      //   detail.mv_img_url = "https://pic1.zhimg.com/v2-664e58f90e12b9263d6c29a7cd8eb202_1200x500.jpg";
-      // detail.mv_play_url = "https://player.youku.com/embed/XNDY3MjAzNTk3Ng==?client_id=f7d81b29f4146ce2";
-      // });    
+      });
     }
   @protected
   bool get wantKeepAlive=>false;

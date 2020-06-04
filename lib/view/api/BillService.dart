@@ -74,6 +74,7 @@ class BillService{
 
   List<BillChartDate> getWeekChartDate(DateTime startTime, DateTime endTime){
     assert(startTime != null);
+    //HostListService().getUserInfo("46705976", 1).then((value) => print(value));
     DateTime now = DateTime.now();
     endTime = endTime ?? now;
     int nowW = now.weekday;

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:bill/models/comment.dart';
+import 'package:bill/models/momiUser.dart';
 import 'package:bill/models/vedioDetail.dart';
 import 'package:bill/models/vedioList.dart';
 import 'package:bill/utils/AesUtil.dart';
@@ -7,7 +8,7 @@ import 'package:bill/utils/HttpUtil.dart';
 import 'package:dio/dio.dart';
 
 class HostListService{
-  String uid = '"71029569"';
+  String uid = '"46705976"';
   Future<List<VedioList>> getHostList(int page) async {
     Map param = new Map()..addAll({
       '"page"':page,
@@ -61,17 +62,27 @@ class HostListService{
     Map resultMap = json.decode(result) as Map;
     if(resultMap['code'] as num == 0 ){
       List result = resultMap['data']['list'] as List;
-      List<Comment> comments = [];
-      result.forEach((element) {
-        List reply = element["reply"] as List;
-        Comment re = Comment.fromJson(element);
-        if(reply != null && reply.length > 0){
-          re.reply = reply.map((e) =>  Comment.fromJson(e)).toList();
-        }
-        comments.add(re);
-      });
-      return comments;
+      return result.map((e) =>  Comment.fromJson(e)).toList();
+    }
+    return null;
+  }
 
+  Future<MomiUser> getUserInfo(String uId, int page) async {
+    Map param = new Map()..addAll({
+      "uId":uId,
+      "meId":uid,
+      "page":page,
+      "perPage":18
+    });
+    print(param.toString());
+    var data = AesUtil.encode(param.toString());
+    Response response = await HttpUtil.post('/api/users/getUserInfo', {'data':data});
+    var result = AesUtil.decode(response.data);
+    print(result);
+    Map resultMap = json.decode(result) as Map;
+    if(resultMap['code'] as num == 0 ){
+      Map<String,dynamic> result = resultMap['data'] as Map<String,dynamic>;
+      return MomiUser.fromJson(result);
     }
     return null;
   }

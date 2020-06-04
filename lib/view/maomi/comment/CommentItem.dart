@@ -12,7 +12,7 @@ class CommentItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent,
+      color: Colors.black26,
       child: ListTile(
         leading:StringUtils.isEmpty(_data.mu_avatar)?Image.asset(
           "assets/imgs/default_avatar.png",
@@ -34,7 +34,7 @@ class CommentItem extends StatelessWidget{
                 '${_data.mu_name}',
                 style: TextStyle(
                     fontSize: 14,
-                    color: Colors.black45
+                    color: Colors.white30
                 ),
               ),
             ),
@@ -46,7 +46,7 @@ class CommentItem extends StatelessWidget{
               child:  Text('${_data.mc_floor}楼',
                 style: TextStyle(
                     fontSize: 10,
-                    color: Colors.black45
+                    color: Colors.white30
                 ),
               ),
             ),
@@ -61,7 +61,7 @@ class CommentItem extends StatelessWidget{
               child:  Text('${_data.mc_created}',
                 style: TextStyle(
                     fontSize: 10,
-                    color: Colors.black45
+                    color:Colors.white30
                 ),
               ),
             ),
@@ -70,13 +70,13 @@ class CommentItem extends StatelessWidget{
               child:  Text('${_data.mc_text}',
                 style: TextStyle(
                     fontSize: 14,
-                    color: Colors.black87
+                    color: Colors.white70
                 ),
               ),
             ),
             _data.reply != null && _data.reply.length > 0 ? Container(
               decoration: BoxDecoration(
-                color: Color(0x50aaaaaa),
+                color: Color(0x50eeeeee),
                 //设置四周圆角 角度
                 borderRadius: BorderRadius.all(Radius.circular(4.0)),
               ),
@@ -98,7 +98,7 @@ class CommentItem extends StatelessWidget{
                           ),
                           TextSpan(
                             text: ':${e.mc_text}',
-                            style: TextStyle(fontSize: 12, color: Colors.black),
+                            style: TextStyle(fontSize: 12, color: Colors.white70),
                           ),
                         ]
                       )

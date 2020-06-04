@@ -1,23 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'comment.dart';
+part of 'momiUser.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Comment _$CommentFromJson(Map<String, dynamic> json) {
-  return Comment()
-    ..mc_id = json['mc_id'] as String
-    ..mv_id = json['mv_id'] as String
-    ..mc_parent_id = json['mc_parent_id'] as String
+MomiUser _$MomiUserFromJson(Map<String, dynamic> json) {
+  return MomiUser()
     ..mu_id = json['mu_id'] as String
-    ..mc_reply_uid = json['mc_reply_uid'].toString()
-    ..mc_text = json['mc_text'] as String
-    ..mc_praises = json['mc_praises'] as String
-    ..mc_reply_count = json['mc_reply_count'] as String
-    ..mc_floor = json['mc_floor'] as String
-    ..mc_created = json['mc_created'] as String
     ..mu_email = json['mu_email'] as String
     ..mu_name = json['mu_name'] as String
     ..mu_sex = json['mu_sex'] as String
@@ -37,26 +28,19 @@ Comment _$CommentFromJson(Map<String, dynamic> json) {
     ..isSignin = json['isSignin'] as num
     ..level = json['level'] as num
     ..levelName = json['levelName'] as String
-    ..reply = (json['reply'] as List)
-        ?.map((e) =>
-            e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
-        ?.toList()
-    ..replyUserName = json['replyUserName'] as String
-    ..replyUserIsAuthor = json['replyUserIsAuthor'] as num
-    ..isAuthor = json['isAuthor'] as num;
+    ..is_vip = json['is_vip'] as num
+    ..play_count = json['play_count'] as num
+    ..is_attention = json['is_attention'] as num
+    ..isToken = json['isToken'] as num
+    ..unReadCount = json['unReadCount'] as num
+    ..video_list =  (json['video_list'] as List)
+          ?.map((e) =>
+      e == null ? null : UserVideoList.fromJson(e as Map<String, dynamic>))
+          ?.toList();
 }
 
-Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
-      'mc_id': instance.mc_id,
-      'mv_id': instance.mv_id,
-      'mc_parent_id': instance.mc_parent_id,
+Map<String, dynamic> _$MomiUserToJson(MomiUser instance) => <String, dynamic>{
       'mu_id': instance.mu_id,
-      'mc_reply_uid': instance.mc_reply_uid,
-      'mc_text': instance.mc_text,
-      'mc_praises': instance.mc_praises,
-      'mc_reply_count': instance.mc_reply_count,
-      'mc_floor': instance.mc_floor,
-      'mc_created': instance.mc_created,
       'mu_email': instance.mu_email,
       'mu_name': instance.mu_name,
       'mu_sex': instance.mu_sex,
@@ -76,8 +60,10 @@ Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
       'isSignin': instance.isSignin,
       'level': instance.level,
       'levelName': instance.levelName,
-      'reply': instance.reply,
-      'replyUserName': instance.replyUserName,
-      'replyUserIsAuthor': instance.replyUserIsAuthor,
-      'isAuthor': instance.isAuthor
+      'is_vip': instance.is_vip,
+      'play_count': instance.play_count,
+      'is_attention': instance.is_attention,
+      'isToken': instance.isToken,
+      'unReadCount': instance.unReadCount,
+      'video_list': instance.video_list
     };
