@@ -42,40 +42,7 @@ class _SliversState extends State<SliversPage> {
         child: CustomScrollView(
           controller: _scrollController,
           slivers: <Widget>[
-            /*SliverAppBar(
-              pinned: true,
-              elevation: 0,
-              expandedHeight: 250,
-              flexibleSpace: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(
-                    'http://img1.mukewang.com/5c18cf540001ac8206000338.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child:BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: 10,
-                        sigmaY: 10,
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          "assets/imgs/default_avatar.png",
-                          width: 120,
-                        ),
-                      ),
-                    ),
-                  ),
-                  FlexibleSpaceBar(
-                    title: Text("UserInfo"),
-                      centerTitle:true,
-                  ),
-                ],
-              )
-            ),*/
+   
             SliverPersistentHeader(    // 可以吸顶的TabBar
               pinned: true,
               delegate:MySliverAppBar()
@@ -214,7 +181,8 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
   final double maxAvatarSize = 120;
 
   final double minLeftLength = 50;
-
+  
+  final double statusBar = MediaQueryData.fromWindow(window).padding.top;
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     double width =  MediaQuery.of(context).size.width / 2;
@@ -223,70 +191,115 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
     double avatarSize = maxAvatarSize - (maxAvatarSize - 50)  * r;
     double alignX =  - 1 * r;
     double alignY = 0.8 - 0.8 * r;
-    double titleLeft = (minLeftLength + 66 ) * r;
+    double titleLeft = (minLeftLength + 60 ) * r;
     double left = (width - shrinkOffset - avatarSize / 2) > minLeftLength ? width - shrinkOffset - avatarSize / 2 : minLeftLength ;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Container(
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Image.network(
-                'http://img1.mukewang.com/5c18cf540001ac8206000338.jpg',
-                fit: BoxFit.cover,
-              ),
-              ClipRect(
-                child:BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: 10,
-                    sigmaY: 10,
+    return Container(
+      //padding: EdgeInsets.fromLTRB(0, statusBar, 0, 0),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, statusBar, 0, 0),
+                  decoration: BoxDecoration(
+                    image:DecorationImage(
+                      image: NetworkImage(
+                        'http://img1.mukewang.com/5c18cf540001ac8206000338.jpg',
+                      ),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  child: Container()
                 ),
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          left: left,
-          child: Container(
-            alignment: Alignment(0, -0.3),
-            height: height,
-            width: avatarSize,
-            child: Padding(
-              padding: EdgeInsets.all(5),
-              child: Image.asset(
-                "assets/imgs/default_avatar.png",
-                width: avatarSize,
-              ),
+                ClipRect(
+                  child:BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: 10,
+                        sigmaY: 10,
+                      ),
+                      child: Container(
+                        child: Text(" "),
+                      )
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        Container(
-          width: double.infinity,
-          height: height,
-          child: Row(
-            children: [
-              Container(width: titleLeft,),
-              Expanded(
-                child: Container(
-                  alignment: Alignment(alignX,alignY),
-                  child: Text("userInfo",style: TextStyle(fontSize: 30,color: Colors.white70),),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, statusBar, 0, 0),
+            child: Stack(
+              children: [
+                Container(
+                height:kToolbarHeight,
+                  child:Row(
+                    children: [
+                      IconButton(
+                        onPressed:() => Navigator.of(context).pop(),
+                        icon: Icon(Icons.arrow_back, color: Colors.white,),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Positioned(
+                  left: left,
+                  child: Container(
+                    alignment: Alignment(0, -0.3),
+                    height: height,
+                    width: avatarSize,
+                    child: Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Image.asset(
+                        "assets/imgs/default_avatar.png",
+                        width: avatarSize,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  height: height,
+                  child: Row(
+                    children: [
+                      Container(width: titleLeft,),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment(alignX,alignY),
+                          child: Text("userInfo",style: TextStyle(fontSize: 30,color: Colors.white70),),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          /*Container(
+            padding: EdgeInsets.fromLTRB(0, statusBar, 0, 0),
+            height: statusBar + kToolbarHeight,
+
+            width: double.infinity,
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed:() => Navigator.of(context).pop(),
+                  icon: Icon(Icons.arrow_back, color: Colors.white,),
+                )
+              ],
+            ),
+          ),*/
+
+        ],
+      ),
     );
   }
 
   @override
-  double get maxExtent => maxHeight;
+  double get maxExtent => maxHeight + statusBar;
 
   @override
-  double get minExtent => kToolbarHeight;
+  double get minExtent => kToolbarHeight + statusBar;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
