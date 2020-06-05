@@ -1,9 +1,6 @@
 import 'dart:convert';
 
-import 'package:bill/models/index.dart';
-import 'package:bill/utils/AesUtil.dart';
 import 'package:bill/utils/TimeMachineUtil.dart';
-import 'package:bill/view/api/HostListService.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:bill/view/api/module/Bill.dart';
@@ -74,7 +71,6 @@ class BillService{
 
   List<BillChartDate> getWeekChartDate(DateTime startTime, DateTime endTime){
     assert(startTime != null);
-    //HostListService().getUserInfo("46705976", 1).then((value) => print(value));
     DateTime now = DateTime.now();
     endTime = endTime ?? now;
     int nowW = now.weekday;

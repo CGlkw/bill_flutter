@@ -2,8 +2,12 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bill/common/SlideButton.dart';
+import 'package:bill/models/comment.dart';
 import 'package:bill/view/api/BillService.dart';
+import 'package:bill/view/api/CommentService.dart';
 import 'package:bill/view/api/module/Bill.dart';
+import 'package:bill/view/comment/CommentItem.dart';
+import 'package:bill/view/comment/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,17 +18,27 @@ class SliversPage extends  StatefulWidget{
 }
 
 
-class _SliversState extends State<SliversPage> {
+class _SliversState extends State<SliversPage> with SingleTickerProviderStateMixin{
 
   int _page = 1;
   List<Bill> _bills = List();
+  List<Comment> _data = [];
 // 用一个key来保存下拉刷新控件RefreshIndicator
   GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey<RefreshIndicatorState>();
   // 承载listView的滚动视图
   ScrollController _scrollController = ScrollController();
+
+  TabController tabController;
+
   @override
   void initState() {
-    showRefreshLoading();
+    CommentService().getCommentList().then((value) => {
+        setState(() {
+      print("加载数据。。。");
+      _data.addAll(value) ;
+    })
+    });
+    this.tabController = TabController(length: 2, vsync: this);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         _loadMoreData();
@@ -36,86 +50,58 @@ class _SliversState extends State<SliversPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:RefreshIndicator(
-        key: _refreshKey,
-        onRefresh: _onRefresh,
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-   
-            SliverPersistentHeader(    // 可以吸顶的TabBar
+      body:CustomScrollView(
+        slivers: <Widget>[
+          SliverPersistentHeader(    // 可以吸顶的TabBar
               pinned: true,
-              delegate:MySliverAppBar()
-            ),
-            SliverFixedExtentList(        // SliverList的语法糖，用于每个item固定高度的List
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) => items(context, index),
-                childCount: _bills.length,
+              delegate:KPlayerSliverDelegate(),
+          ),
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: StickyTabBarDelegate(
+              child: TabBar(
+                labelColor: Colors.black,
+                controller: this.tabController,
+                tabs: <Widget>[
+                  Tab(text: 'Home'),
+                  Tab(text: 'Profile'),
+                ],
               ),
-              itemExtent: 80,
             ),
-          ],
-        ),
+          ),
+          SliverFillRemaining(
+            child: TabBarView(
+              controller: this.tabController,
+              children: <Widget>[
+                Center(child: Text('Content of Home')),
+                Container(
+                  color: Colors.white,
+                  child: RefreshIndicator(
+                    key: _refreshKey,
+                    onRefresh: _onRefresh,
+                    child:ListView.builder(
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.all(0),
+                      itemCount: _data.length,
+                      itemBuilder: (context, i) => CommentItem(_data[i]),
+                    ),
+                ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
-// item控件
-  Widget items(context, index) {
-    if (index == _bills.length) {
-      return Container(
-        child: Padding(
-            padding: const EdgeInsets.all(1.0),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RefreshProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                    strokeWidth: 2.0,
-                  ),
-                ],
-              ),
-            )
-        ),
-      );
-    }
-    var key = GlobalKey<SlideButtonState>();
-    return Container(
-          color:Colors.white,
-          child: ListTile(
-            title: Text('${_bills[index].type}'),
-            subtitle: Text('${_bills[index].remark}'),
-            trailing: Text('${_bills[index].money}'),
-          ),
-        );
 
-
-
-  }
-  Widget buildAction(GlobalKey<SlideButtonState> key, String text, Color color,
-      GestureTapCallback tap) {
-
-    return Padding(
-        padding: EdgeInsets.only(top: 1, bottom: 1),
-        child: InkWell(
-          onTap: tap,
-          child: Container(
-            alignment: Alignment.center,
-            width: 80,
-            color: color,
-            child: Text(text,
-                style: TextStyle(
-                  color: Colors.white,
-                )),
-          ),
-        )
-    );
-  }
   // 加载数据
   void _loadData(int page) {
-    BillService().getBillList(page:page).then((value) => {
-      setState(() {
-        this._bills.addAll(value);
+    CommentService().getCommentList().then((value) => {
+        setState(() {
+          print("加载数据。。。");
+        _data.addAll(value) ;
       })
     });
   }
@@ -125,7 +111,7 @@ class _SliversState extends State<SliversPage> {
     return Future.delayed(Duration(milliseconds: 300), () {
       print("正在刷新...");
       _page = 1;
-      this._bills.clear();
+      this._data.clear();
       _loadData(_page);
     });
   }
@@ -148,7 +134,39 @@ class _SliversState extends State<SliversPage> {
     });
   }
 }
+class KPlayerSliverDelegate extends SliverPersistentHeaderDelegate {
 
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    print(shrinkOffset);
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black
+      ),
+      child: Center(
+        child: Text("video",
+          style: TextStyle(
+            fontSize: 50,
+            color: Colors.white
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 600; // 展开状态下组件的高度；
+
+  @override
+  double get minExtent => 300; // 收起状态下组件的高度；
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
+}
 class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar child;
 
@@ -170,142 +188,6 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return true;
   }
-}
-
-class MySliverAppBar extends SliverPersistentHeaderDelegate{
-
-  final double kToolbarHeight = 56.0;
-
-  final double maxHeight = 200.0;
-
-  final double maxAvatarSize = 120;
-
-  final double minLeftLength = 50;
-  
-  final double statusBar = MediaQueryData.fromWindow(window).padding.top;
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    double width =  MediaQuery.of(context).size.width / 2;
-    double height = maxHeight - shrinkOffset < kToolbarHeight ? kToolbarHeight:maxHeight - shrinkOffset;
-    double r = (maxHeight - height) / (maxHeight - kToolbarHeight);
-    double avatarSize = maxAvatarSize - (maxAvatarSize - 50)  * r;
-    double alignX =  - 1 * r;
-    double alignY = 0.8 - 0.8 * r;
-    double titleLeft = (minLeftLength + 60 ) * r;
-    double left = (width - shrinkOffset - avatarSize / 2) > minLeftLength ? width - shrinkOffset - avatarSize / 2 : minLeftLength ;
-    return Container(
-      //padding: EdgeInsets.fromLTRB(0, statusBar, 0, 0),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(0, statusBar, 0, 0),
-                  decoration: BoxDecoration(
-                    image:DecorationImage(
-                      image: NetworkImage(
-                        'http://img1.mukewang.com/5c18cf540001ac8206000338.jpg',
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                ClipRect(
-                  child:BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: 10,
-                        sigmaY: 10,
-                      ),
-                      child: Container(
-                        child: Text(" "),
-                      )
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.fromLTRB(0, statusBar, 0, 0),
-            child: Stack(
-              children: [
-                Container(
-                height:kToolbarHeight,
-                  child:Row(
-                    children: [
-                      IconButton(
-                        onPressed:() => Navigator.of(context).pop(),
-                        icon: Icon(Icons.arrow_back, color: Colors.white,),
-                      )
-                    ],
-                  ),
-                ),
-                Positioned(
-                  left: left,
-                  child: Container(
-                    alignment: Alignment(0, -0.3),
-                    height: height,
-                    width: avatarSize,
-                    child: Padding(
-                      padding: EdgeInsets.all(5),
-                      child: Image.asset(
-                        "assets/imgs/default_avatar.png",
-                        width: avatarSize,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  height: height,
-                  child: Row(
-                    children: [
-                      Container(width: titleLeft,),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment(alignX,alignY),
-                          child: Text("userInfo",style: TextStyle(fontSize: 30,color: Colors.white70),),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          /*Container(
-            padding: EdgeInsets.fromLTRB(0, statusBar, 0, 0),
-            height: statusBar + kToolbarHeight,
-
-            width: double.infinity,
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed:() => Navigator.of(context).pop(),
-                  icon: Icon(Icons.arrow_back, color: Colors.white,),
-                )
-              ],
-            ),
-          ),*/
-
-        ],
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => maxHeight + statusBar;
-
-  @override
-  double get minExtent => kToolbarHeight + statusBar;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
-  }
-
 }
 
 class StickyDelegate extends SliverPersistentHeaderDelegate {

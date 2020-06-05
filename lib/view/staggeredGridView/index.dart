@@ -1,9 +1,6 @@
 import 'dart:math';
 
-import 'package:bill/models/index.dart';
 import 'package:bill/models/vedioList.dart';
-import 'package:bill/view/api/HostListService.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';

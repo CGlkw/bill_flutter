@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:bill/common/BillPlayer.dart';
 import 'package:bill/models/vedioDetail.dart';
+import 'package:bill/utils/StringUtils.dart';
 import 'package:bill/view/api/HostListService.dart';
 import 'package:bill/view/maomi/comment/index.dart';
+import 'package:bill/view/maomi/userInfo/UserInfo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -64,6 +66,25 @@ class PlayerState extends State<Player> with TickerProviderStateMixin{
                         Container(
                           width: double.infinity,
                           child: AppBar(
+                            actions:[
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserInfo(detail.mu_id)));
+                                },
+                                child:StringUtils.isEmpty(detail.mu_avatar)?Image.asset(
+                                  "assets/imgs/default_avatar.png",
+                                  width: 40,
+                                ):Container(
+                                  height: 40.0,
+                                  width: 40.0,
+                                  child: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                      detail.mu_avatar,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                             title: TabBar(
                               controller:tabController,
                               tabs: [
@@ -71,6 +92,7 @@ class PlayerState extends State<Player> with TickerProviderStateMixin{
                                 Tab(text:"评论"),
                               ],
                             ),
+
                             elevation: 0,
                             backgroundColor: Colors.transparent,
                           )
