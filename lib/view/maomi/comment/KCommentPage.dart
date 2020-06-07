@@ -23,7 +23,7 @@ class _CommentPageState extends State<KCommentPage> with AutomaticKeepAliveClien
   // 承载listView的滚动视图
   ScrollController _scrollController = ScrollController();
 
-   // 加载数据
+  // 加载数据
   void _loadData(int page) {
 
     HostListService().getComments(widget._mvId, _page).then((value) => {
@@ -40,7 +40,7 @@ class _CommentPageState extends State<KCommentPage> with AutomaticKeepAliveClien
       _page = 1;
       _data.clear();
       _loadData(_page);
-      
+
     });
   }
 
@@ -48,9 +48,9 @@ class _CommentPageState extends State<KCommentPage> with AutomaticKeepAliveClien
   Future<Null> _loadMoreData() {
     return Future.delayed(Duration(milliseconds: 300), () {
       print("正在加载更多...");
-        _page++;
-        _loadData(_page);
-      
+      _page++;
+      _loadData(_page);
+
     });
   }
 
@@ -76,7 +76,7 @@ class _CommentPageState extends State<KCommentPage> with AutomaticKeepAliveClien
 
   @override
   Widget build(BuildContext context) {
-    
+
     return Container(
       alignment: Alignment.center,
       child: RefreshIndicator(

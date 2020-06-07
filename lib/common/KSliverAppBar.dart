@@ -77,10 +77,10 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
                 Container(
                   padding: EdgeInsets.fromLTRB(0, statusBar, 0, 0),
                   decoration: BoxDecoration(
-                    image:DecorationImage(
+                    image:image != null ?DecorationImage(
                       image: image,
                       fit: BoxFit.cover,
-                    ),
+                    ):null,
                   ),
                 ),
                 ClipRect(

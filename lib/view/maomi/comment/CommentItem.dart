@@ -12,7 +12,6 @@ class CommentItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black26,
       child: ListTile(
         leading:StringUtils.isEmpty(_data.mu_avatar)?Image.asset(
           "assets/imgs/default_avatar.png",

@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:bill/common/BillPlayer.dart';
 import 'package:bill/common/SlideButton.dart';
 import 'package:bill/models/comment.dart';
 import 'package:bill/view/api/BillService.dart';
@@ -30,13 +31,15 @@ class _SliversState extends State<SliversPage> with SingleTickerProviderStateMix
 
   TabController tabController;
 
+  bool isMin = false;
+  double sliverHeight = 600;
   @override
   void initState() {
     CommentService().getCommentList().then((value) => {
         setState(() {
       print("加载数据。。。");
       _data.addAll(value) ;
-    })
+      })
     });
     this.tabController = TabController(length: 2, vsync: this);
     _scrollController.addListener(() {
@@ -49,49 +52,50 @@ class _SliversState extends State<SliversPage> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body:CustomScrollView(
-        slivers: <Widget>[
-          SliverPersistentHeader(    // 可以吸顶的TabBar
-              pinned: true,
-              delegate:KPlayerSliverDelegate(),
-          ),
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: StickyTabBarDelegate(
-              child: TabBar(
-                labelColor: Colors.black,
-                controller: this.tabController,
-                tabs: <Widget>[
-                  Tab(text: 'Home'),
-                  Tab(text: 'Profile'),
-                ],
-              ),
-            ),
-          ),
-          SliverFillRemaining(
-            child: TabBarView(
+    List<Widget> _silverBuilder(BuildContext context, bool innerBoxIsScrolled) {
+      return <Widget> [
+        SliverPersistentHeader(    // 可以吸顶的TabBar
+          pinned: true,
+          delegate:KPlayerSliverDelegate(),
+        ),
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: StickyTabBarDelegate(
+            child: TabBar(
+              labelColor: Colors.black,
               controller: this.tabController,
-              children: <Widget>[
-                Center(child: Text('Content of Home')),
-                Container(
-                  color: Colors.white,
-                  child: RefreshIndicator(
-                    key: _refreshKey,
-                    onRefresh: _onRefresh,
-                    child:ListView.builder(
-                      controller: _scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: EdgeInsets.all(0),
-                      itemCount: _data.length,
-                      itemBuilder: (context, i) => CommentItem(_data[i]),
-                    ),
-                ),
-                ),
+              tabs: <Widget>[
+                Tab(text: 'Home'),
+                Tab(text: 'Profile'),
               ],
             ),
           ),
-        ],
+        ),
+      ];
+    }
+    return Scaffold(
+      body:NestedScrollView(
+        controller: _scrollController,
+        physics: AlwaysScrollableScrollPhysics(),
+        headerSliverBuilder: _silverBuilder,
+        body:TabBarView(
+          controller: this.tabController,
+          children: <Widget>[
+            Center(child: Text('Content of Home')),
+            Container(
+              color: Colors.white,
+              child: RefreshIndicator(
+                key: _refreshKey,
+                onRefresh: _onRefresh,
+                child:ListView.builder(
+                  padding: EdgeInsets.all(0),
+                  itemCount: _data.length,
+                  itemBuilder: (context, i) => CommentItem(_data[i]),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -136,31 +140,30 @@ class _SliversState extends State<SliversPage> with SingleTickerProviderStateMix
 }
 class KPlayerSliverDelegate extends SliverPersistentHeaderDelegate {
 
+  final double minHeight;
+  final double maxHeight;
+  final String videoUrl;
+
+  KPlayerSliverDelegate({this.minHeight, this.maxHeight, this.videoUrl});
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print(shrinkOffset);
     return Container(
       decoration: BoxDecoration(
         color: Colors.black
       ),
       child: Center(
-        child: Text("video",
-          style: TextStyle(
-            fontSize: 50,
-            color: Colors.white
-          ),
-        ),
+        child: BillPlayer('https://gss3.baidu.com/6LZ0ej3k1Qd3ote6lo7D0j9wehsv/tieba-smallvideo/60_005dc4f51afef28e246a3818cf147595.mp4','9','16'),
       ),
     );
   }
 
   @override
-  double get maxExtent => 600; // 展开状态下组件的高度；
+  double get maxExtent => maxHeight; // 展开状态下组件的高度；
 
   @override
-  double get minExtent => 300; // 收起状态下组件的高度；
+  double get minExtent => minHeight; // 收起状态下组件的高度；
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {

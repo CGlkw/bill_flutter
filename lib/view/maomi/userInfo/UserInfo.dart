@@ -6,8 +6,11 @@ import 'package:bill/common/KSliverAppBar.dart';
 import 'package:bill/models/momiUser.dart';
 import 'package:bill/models/userVideoList.dart';
 import 'package:bill/models/vedioList.dart';
+import 'package:bill/utils/StringUtils.dart';
 import 'package:bill/view/api/HostListService.dart';
 import 'package:bill/view/api/module/Bill.dart';
+import 'package:bill/view/maomi/player/playui.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
@@ -53,13 +56,13 @@ class _UserInfoState extends State<UserInfo> {
                 pinned: true,
                 maxHeight: 300,
                 maxAvatarSize: 120,
-                image: _userInfo==null?null:NetworkImage(
+                image: _userInfo==null?null:CachedNetworkImageProvider(
                   _VedioList[0].mv_img_url,
                 ),
-                avatar: _userInfo?.mu_avatar==null?
+                avatar: StringUtils.isEmpty(_userInfo?.mu_avatar)?
                 AssetImage("assets/imgs/default_avatar.png"):
-                NetworkImage(_userInfo?.mu_avatar),
-                text:Text(_userInfo?.mu_name,style: TextStyle(fontSize: 30,color: Colors.white70),)
+                CachedNetworkImageProvider(_userInfo?.mu_avatar),
+                text:Text(_userInfo?.mu_name==null?"":_userInfo?.mu_name,style: TextStyle(fontSize: 30,color: Colors.white70),)
             ),
             SliverToBoxAdapter(
               child: Container(
@@ -107,48 +110,53 @@ class _UserInfoState extends State<UserInfo> {
   Widget _buildItemGrid2(index){
     return Container(
       padding: EdgeInsets.all(5),
-      child:Stack(
-        children: [
-          ClipRRect(
-            borderRadius:BorderRadius.all(Radius.circular(5)),
-            child: Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(
-                        _VedioList[index].mv_img_url
-                    ),
-                    fit: BoxFit.cover
+      child:InkWell(
+        onTap: () =>{
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Player(_VedioList[index].mv_id)))
+        },
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius:BorderRadius.all(Radius.circular(5)),
+              child: Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: CachedNetworkImageProvider(
+                          _VedioList[index].mv_img_url
+                      ),
+                      fit: BoxFit.cover
+                  ),
                 ),
               ),
             ),
-          ),
-          Column(
-            children: [
-              Expanded(child: Text(" ")),
-              ClipRRect(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5),bottomRight: Radius.circular(5)),
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                      sigmaX: 20,
-                      sigmaY: 20,
-                    ),
-                    child: Container(
-                      height: 30,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Colors.black26
+            Column(
+              children: [
+                Expanded(child: Text(" ")),
+                ClipRRect(
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5),bottomRight: Radius.circular(5)),
+                  child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: 20,
+                        sigmaY: 20,
                       ),
-                      child: Center(
-                        child: Text(_VedioList[index].mv_title,style: TextStyle(color: Colors.white70),),
-                      ),
-                    )
-                ),
-              )
-            ],
-          ),
-        ],
+                      child: Container(
+                        height: 30,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Colors.black26
+                        ),
+                        child: Center(
+                          child: Text(_VedioList[index].mv_title,style: TextStyle(color: Colors.white70),),
+                        ),
+                      )
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -157,6 +165,7 @@ class _UserInfoState extends State<UserInfo> {
   void _loadData(int page) {
     HostListService().getUserInfo(widget.uId, _page).then((value) => {
       setState((){
+        print(value);
         this._userInfo = value;
         this._VedioList.addAll(value.video_list);
       })

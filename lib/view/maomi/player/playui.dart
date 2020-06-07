@@ -5,7 +5,9 @@ import 'package:bill/models/vedioDetail.dart';
 import 'package:bill/utils/StringUtils.dart';
 import 'package:bill/view/api/HostListService.dart';
 import 'package:bill/view/maomi/comment/index.dart';
+import 'package:bill/view/maomi/player/NewPlayer.dart';
 import 'package:bill/view/maomi/userInfo/UserInfo.dart';
+import 'package:bill/view/slivers/TestPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -61,7 +63,14 @@ class PlayerState extends State<Player> with TickerProviderStateMixin{
                   sigmaX: 20,
                   sigmaY: 20,
                 ),
-                child:Column(
+                child: NewPlayer(
+                  mvId: detail.mv_id,
+                  uId: detail.mu_id,
+                  url:detail.mv_play_url,
+                  mvPlayWidth:double.parse(detail.mv_play_width),
+                  mvPlayHeight:double.parse(detail.mv_play_height),
+                ),
+                /*Column(
                       children: [
                         Container(
                           width: double.infinity,
@@ -105,12 +114,12 @@ class PlayerState extends State<Player> with TickerProviderStateMixin{
                               Center(
                                 child:BillPlayer(detail.mv_play_url,detail.mv_play_width,detail.mv_play_height),
                               ),
-                              CommentPage(widget.mvId),
+                              KCommentPage(widget.mvId),
                             ]
                           ),
                         )
                       ]
-                    ), 
+                    ), */
                 )
             ),
           ]

@@ -1,6 +1,7 @@
 import 'package:bill/view/comment/index.dart';
 import 'package:bill/view/maomi/player/playui.dart';
 import 'package:bill/view/slivers/SliversPage.dart';
+import 'package:bill/view/slivers/TestPage.dart';
 import 'package:bill/view/staggeredGridView/index.dart';
 import 'package:flutter/material.dart';
 
@@ -58,6 +59,11 @@ class MyDrawer extends StatelessWidget {
                         leading: const Icon(Icons.color_lens),
                         title: Text('SliversPage'),
                         onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SliversPage())),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.color_lens),
+                        title: Text('TestSliversPage'),
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TestPage())),
                       ),
                     ],
                   ),

@@ -69,10 +69,10 @@ class HostListService{
 
   Future<MomiUser> getUserInfo(String uId, int page) async {
     Map param = new Map()..addAll({
-      "uId":uId,
-      "meId":uid,
-      "page":page,
-      "perPage":18
+      '"uId"':'"$uId"',
+      '"meId"':uid,
+      '"page"':page,
+      '"perPage"':18
     });
     print(param.toString());
     var data = AesUtil.encode(param.toString());
