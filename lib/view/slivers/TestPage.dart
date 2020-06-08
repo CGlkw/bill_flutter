@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'package:bill/common/BillPlayer.dart';
 import 'package:flutter/material.dart'
     hide NestedScrollView, NestedScrollViewState;
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
-import 'package:loading_more_list/loading_more_list.dart';
 
 class LoadMoreDemo extends StatefulWidget {
   @override
@@ -47,17 +47,23 @@ class _LoadMoreDemoState extends State<LoadMoreDemo>
       key: _key,
       headerSliverBuilder: (BuildContext c, bool f) {
         return <Widget>[
-          SliverAppBar(
-              pinned: true,
-              expandedHeight: 200.0,
-              title: const Text('load more list'),
-              flexibleSpace: FlexibleSpaceBar(
-                //centerTitle: true,
-                  collapseMode: CollapseMode.pin,
-                  background: Image.network(
-                    'assets/467141054.jpg',
-                    fit: BoxFit.fill,
-                  )))
+          SliverPersistentHeader(    // 可以吸顶的TabBar
+            pinned: true,
+            delegate:KPlayerSliverDelegate(maxHeight: 600,minHeight: 300),
+          ),
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: StickyTabBarDelegate(
+              child: TabBar(
+                labelColor: Colors.black,
+                controller: primaryTC,
+                tabs: <Widget>[
+                  Tab(text: 'Home'),
+                  Tab(text: 'Profile'),
+                ],
+              ),
+            ),
+          ),
         ];
       },
       //1.[pinned sliver header issue](https://github.com/flutter/flutter/issues/22393)
@@ -72,36 +78,70 @@ class _LoadMoreDemoState extends State<LoadMoreDemo>
 
         return Key(index);
       },
-      body: Column(
-        children: <Widget>[
-          TabBar(
-            controller: primaryTC,
-            labelColor: Colors.blue,
-            indicatorColor: Colors.blue,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorWeight: 2.0,
-            isScrollable: false,
-            unselectedLabelColor: Colors.grey,
-            tabs: const <Tab>[
-              Tab(text: 'Tab0'),
-              Tab(text: 'Tab1'),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: primaryTC,
-              children: const <Widget>[
-                TabViewItem(Key('Tab0')),
-                TabViewItem(Key('Tab1')),
-              ],
-            ),
-          )
+      body: TabBarView(
+        controller: primaryTC,
+        children: const <Widget>[
+          TabViewItem(Key('Tab0')),
+          TabViewItem(Key('Tab1')),
         ],
       ),
     );
   }
 }
+class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar child;
 
+  StickyTabBarDelegate({@required this.child});
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return this.child;
+  }
+
+  @override
+  double get maxExtent => this.child.preferredSize.height; // 展开状态下组件的高度；
+
+  @override
+  double get minExtent => this.child.preferredSize.height; // 收起状态下组件的高度；
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
+}
+class KPlayerSliverDelegate extends SliverPersistentHeaderDelegate {
+
+  final double minHeight;
+  final double maxHeight;
+  final String videoUrl;
+
+  KPlayerSliverDelegate({this.minHeight, this.maxHeight, this.videoUrl});
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.black
+      ),
+      child: Center(
+        child: BillPlayer('https://gss3.baidu.com/6LZ0ej3k1Qd3ote6lo7D0j9wehsv/tieba-smallvideo/60_005dc4f51afef28e246a3818cf147595.mp4','9','16'),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => maxHeight; // 展开状态下组件的高度；
+
+  @override
+  double get minExtent => minHeight; // 收起状态下组件的高度；
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
+}
 
 class TabViewItem extends StatefulWidget {
   const TabViewItem(this.tabKey);
@@ -132,6 +172,7 @@ class _TabViewItemState extends State<TabViewItem>
     super.build(context);
     return NestedScrollViewInnerScrollPositionKeyWidget(widget.tabKey,
       EasyRefresh(
+        //firstRefresh: true,
         controller: _controller,
         header: MaterialHeader(),
         footer: MaterialFooter(),

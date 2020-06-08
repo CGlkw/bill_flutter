@@ -64,6 +64,7 @@ class PlayerState extends State<Player> with TickerProviderStateMixin{
                   sigmaY: 20,
                 ),
                 child: NewPlayer(
+                  vedioDetail: detail,
                   mvId: detail.mv_id,
                   uId: detail.mu_id,
                   url:detail.mv_play_url,

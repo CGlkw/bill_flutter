@@ -11,98 +11,60 @@ import 'package:bill/view/api/HostListService.dart';
 import 'package:bill/view/api/module/Bill.dart';
 import 'package:bill/view/maomi/player/playui.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_easyrefresh/material_footer.dart';
+import 'package:flutter_easyrefresh/material_header.dart';
 
-class UserInfo extends StatefulWidget{
+class NewUserInfo extends StatefulWidget{
 
   final String uId;
-
-  UserInfo(this.uId);
+  final Key tabKey;
+  NewUserInfo(this.uId,this.tabKey);
 
   @override
-  State<StatefulWidget> createState() => _UserInfoState();
+  State<StatefulWidget> createState() => _NewUserInfoState();
 }
 
-class _UserInfoState extends State<UserInfo> {
+class _NewUserInfoState extends State<NewUserInfo>
+    with AutomaticKeepAliveClientMixin{
   int _page = 0;
   List<UserVideoList> _VedioList = [];
   MomiUser _userInfo;
-// 用一个key来保存下拉刷新控件RefreshIndicator
-  GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey<RefreshIndicatorState>();
-  // 承载listView的滚动视图
-  ScrollController _scrollController = ScrollController();
+  EasyRefreshController _controller = EasyRefreshController();
+
   @override
   void initState() {
-    showRefreshLoading();
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-        _loadMoreData();
-      }
-    });
+    _onRefresh();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Colors.black54,
-      body:RefreshIndicator(
-        key: _refreshKey,
-        onRefresh: _onRefresh,
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-            KSliverAppBar(
-                pinned: true,
-                maxHeight: 250,
-                maxAvatarSize: 120,
-                image: _userInfo==null?null:CachedNetworkImageProvider(
-                  _VedioList[0].mv_img_url,
-                ),
-                avatar: StringUtils.isEmpty(_userInfo?.mu_avatar)?
-                AssetImage("assets/imgs/default_avatar.png"):
-                CachedNetworkImageProvider(_userInfo?.mu_avatar),
-                text:Text(_userInfo?.mu_name==null?"":_userInfo?.mu_name,style: TextStyle(fontSize: 30,color: Colors.white70),)
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                height: 5,
-              ),
-            ),
-            SliverGrid(
+      body: NestedScrollViewInnerScrollPositionKeyWidget(widget.tabKey,
+        EasyRefresh(
+          //firstRefresh: true,
+          controller: _controller,
+          header: MaterialHeader(),
+          footer: MaterialFooter(),
+          child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
                 childAspectRatio: 1.0 / 0.618,
               ),
-              delegate: new SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  return _buildItemGrid2(index);
-                },
-                childCount: _VedioList.length,
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: _page == 0 ? null : Container(
-                child: Padding(
-                    padding: const EdgeInsets.all(1.0),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          RefreshProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                            strokeWidth: 2.0,
-                          ),
-                        ],
-                      ),
-                    )
-                ),
-              ),
-            ),
-          ],
+              itemBuilder: (BuildContext context, int index) {
+                return _buildItemGrid2(index);
+              }
+          ),
+          onRefresh: () => _onRefresh(),
+          onLoad: () => _loadMoreData(),
         ),
       ),
     );
@@ -192,14 +154,6 @@ class _UserInfoState extends State<UserInfo> {
     });
   }
 
-  // 刷新
-  showRefreshLoading() {
-    new Future.delayed(const Duration(seconds: 0), () {
-      _refreshKey.currentState.show().then((e) {
-        _page = 1;
-      });
-      return true;
-    });
-  }
-
+  @override
+  bool get wantKeepAlive => true;
 }
