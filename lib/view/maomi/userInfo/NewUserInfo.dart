@@ -61,7 +61,8 @@ class _NewUserInfoState extends State<NewUserInfo>
               ),
               itemBuilder: (BuildContext context, int index) {
                 return _buildItemGrid2(index);
-              }
+              },
+            itemCount: _VedioList.length,
           ),
           onRefresh: () => _onRefresh(),
           onLoad: () => _loadMoreData(),

@@ -93,7 +93,7 @@ class _NewCommentPageState extends State<NewCommentPage> with AutomaticKeepAlive
             itemBuilder: (buildContext, index) {
               return items(context, index);
             },
-            itemCount: _data.isEmpty ? 0 : _data.length+1,
+            itemCount: _data.length,
             separatorBuilder: (buildContext, index) {
               return Divider(
                 height: 0.5,
