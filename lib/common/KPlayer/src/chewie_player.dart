@@ -125,13 +125,14 @@ class ChewieState extends State<Chewie> {
     final TransitionRoute<Null> route = PageRouteBuilder<Null>(
       pageBuilder: _fullScreenRoutePageBuilder,
     );
-
-    SystemChrome.setEnabledSystemUIOverlays([]);
-    if (isAndroid) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
+    if(!(widget.controller.aspectRatio < 16/9)){
+      SystemChrome.setEnabledSystemUIOverlays([]);
+      if (isAndroid) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      }
     }
 
     if (!widget.controller.allowedScreenSleep) {
@@ -145,11 +146,12 @@ class ChewieState extends State<Chewie> {
     // The wakelock plugins checks whether it needs to perform an action internally,
     // so we do not need to check Wakelock.isEnabled.
     Wakelock.disable();
-
-    SystemChrome.setEnabledSystemUIOverlays(
-        widget.controller.systemOverlaysAfterFullScreen);
-    SystemChrome.setPreferredOrientations(
-        widget.controller.deviceOrientationsAfterFullScreen);
+    if(!(widget.controller.aspectRatio < 16/9)){
+      SystemChrome.setEnabledSystemUIOverlays(
+          widget.controller.systemOverlaysAfterFullScreen);
+      SystemChrome.setPreferredOrientations(
+          widget.controller.deviceOrientationsAfterFullScreen);
+    }
   }
 }
 

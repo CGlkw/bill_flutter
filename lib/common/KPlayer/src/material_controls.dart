@@ -176,8 +176,8 @@ class _MaterialControlsState extends State<MaterialControls> {
           child: Center(
             child: Icon(
               chewieController.isFullScreen
-                  ? Icons.fullscreen_exit
-                  : Icons.fullscreen,
+                  ? chewieController.aspectRatio < 16/9? Icons.unfold_less : Icons.fullscreen_exit
+                  : chewieController.aspectRatio < 16/9? Icons.unfold_more :Icons.fullscreen,
               color: lightColor,
             ),
           ),

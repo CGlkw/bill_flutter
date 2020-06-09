@@ -23,14 +23,10 @@ class _NewCommentPageState extends State<NewCommentPage> with AutomaticKeepAlive
   List<Comment> _data = [];
 
   int _page = 1;
-  // 用一个key来保存下拉刷新控件RefreshIndicator
-  GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey<RefreshIndicatorState>();
   // 承载listView的滚动视图
-  ScrollController _scrollController = ScrollController();
 
   // 加载数据
   void _loadData(int page) {
-
     HostListService().getComments(widget._mvId, _page).then((value) => {
       setState(() {
         _data.addAll(value) ;
@@ -59,14 +55,6 @@ class _NewCommentPageState extends State<NewCommentPage> with AutomaticKeepAlive
     });
   }
 
-  // 刷新
-  showRefreshLoading() {
-    new Future.delayed(const Duration(seconds: 0), () {
-      _refreshKey.currentState.show().then((e) {
-      });
-      return true;
-    });
-  }
   EasyRefreshController _controller = EasyRefreshController();
 
   @override
@@ -77,19 +65,15 @@ class _NewCommentPageState extends State<NewCommentPage> with AutomaticKeepAlive
 
   @override
   Widget build(BuildContext context) {
-
-    return Container(
-      alignment: Alignment.center,
-      child: NestedScrollViewInnerScrollPositionKeyWidget(widget.key,
+    super.build(context);
+    return NestedScrollViewInnerScrollPositionKeyWidget(widget.key,
         EasyRefresh(
           //firstRefresh: true,
           controller: _controller,
           header: MaterialHeader(),
           footer: MaterialFooter(),
           child: ListView.separated(
-            controller: _scrollController,
             padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-            physics: const AlwaysScrollableScrollPhysics(),
             itemBuilder: (buildContext, index) {
               return items(context, index);
             },
@@ -104,7 +88,7 @@ class _NewCommentPageState extends State<NewCommentPage> with AutomaticKeepAlive
           onRefresh: () => _onRefresh(),
           onLoad: () => _loadMoreData(),
         ),
-      ),/*RefreshIndicator(
+      /*RefreshIndicator(
         key: _refreshKey,
         onRefresh: _onRefresh,
         child: ListView.separated(

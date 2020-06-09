@@ -11,8 +11,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context)  {
     return  MultiProvider(
-      providers: <SingleChildCloneableWidget>[
-        ChangeNotifierProvider.value(notifier: ThemeModel()),
+      providers: [
+        ChangeNotifierProvider(create:(_)=> ThemeModel()),
       ],
       child: Consumer<ThemeModel>(
         builder: (BuildContext context, themeModel, Widget child){

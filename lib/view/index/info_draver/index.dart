@@ -3,6 +3,7 @@ import 'package:bill/view/maomi/player/playui.dart';
 import 'package:bill/view/slivers/SliversPage.dart';
 import 'package:bill/view/slivers/TestPage.dart';
 import 'package:bill/view/staggeredGridView/index.dart';
+import 'package:bill/view/yyets/ui/pages/MainPage.dart';
 import 'package:flutter/material.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -32,8 +33,9 @@ class MyDrawer extends StatelessWidget {
                         title: const Text('Add account'),
                       ),
                       ListTile(
-                        leading: const Icon(Icons.settings),
-                        title: const Text('Manage accounts'),
+                        leading: const Icon(Icons.video_call),
+                        title: Text('r人人影视'),
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage())),
                       ),
                       ListTile(
                         leading: const Icon(Icons.color_lens),
