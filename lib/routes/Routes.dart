@@ -6,7 +6,6 @@ import 'package:bill/view/yyets/ui/pages/FavoritesPage.dart';
 import 'package:bill/view/yyets/ui/pages/LatestResourcePage.dart';
 import 'package:bill/view/yyets/ui/pages/LoginPage.dart';
 import 'package:bill/view/yyets/ui/pages/MainPage.dart';
-import 'package:bill/view/yyets/ui/pages/NewsPage.dart';
 import 'package:bill/view/yyets/ui/pages/ResInfoPage.dart';
 import 'package:bill/view/yyets/ui/pages/VideoPlayerPage.dart';
 import 'package:bill/view/yyets/ui/pages/VideoPlayerPage2.dart';
@@ -35,7 +34,6 @@ class Routes{
       "/login": (c) => LoginPage(),
 //  "/register": (c) => RegisterPage(),
       "/download": (c) => DownloadManagerPage(),
-      "/news": (c) => NewsPage(),
       "/play": (c) => (PlatformExt.isMobilePhone)
           ? VideoPlayerPage(argsFromContext(c))
           : VideoPlayerPageForWeb(argsFromContext(c)),

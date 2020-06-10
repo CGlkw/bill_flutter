@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage>
         tooltip: "资讯",
         backgroundColor: Colors.blueAccent,
         onPressed: () {
-          Navigator.pushNamed(context, "/news");
+          //Navigator.pushNamed(context, "/news");
         },
         child: Icon(
           Icons.inbox,

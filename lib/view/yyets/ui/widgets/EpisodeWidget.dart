@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bill/view/yyets/utils/RRResManager.dart';
 import 'package:bill/view/yyets/utils/toast.dart';
 import 'package:bill/view/yyets/utils/tools.dart';
+import 'package:fyyets_dl2/RRResManager.dart';
 
 ///
 /// 季集

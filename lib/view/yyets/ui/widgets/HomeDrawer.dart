@@ -4,9 +4,9 @@ import 'package:bill/view/yyets/app/AppIcons.dart';
 import 'package:bill/view/yyets/model/RRUser.dart';
 import 'package:bill/view/yyets/ui/widgets/visibility.dart';
 import 'package:bill/view/yyets/ui/widgets/wrapped_material_dialog.dart';
-import 'package:bill/view/yyets/utils/RRResManager.dart';
 import 'package:bill/view/yyets/utils/toast.dart';
 import 'package:bill/view/yyets/utils/tools.dart';
+import 'package:fyyets_dl2/RRResManager.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';

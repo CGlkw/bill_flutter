@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bill/view/yyets/app/Api.dart';
 import 'package:bill/view/yyets/ui/load/LoadingStatus.dart';
-import 'package:bill/view/yyets/utils/RRResManager.dart';
 import 'package:bill/view/yyets/utils/constants.dart';
 import 'package:bill/view/yyets/utils/mysp.dart';
 import 'package:bill/view/yyets/utils/times.dart';
 import 'package:bill/view/yyets/utils/toast.dart';
 import 'package:bill/view/yyets/utils/tools.dart';
+import 'package:fyyets_dl2/RRResManager.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -122,6 +122,7 @@ class _ResInfoState extends State<ResInfoPage> {
               tooltip: "边下边播",
               backgroundColor: Colors.lightBlue,
               onPressed: () {
+                print("RRResManager.checkPlatform():${RRResManager.checkPlatform()}");
                 if (RRResManager.checkPlatform()) {
                   _downloadAndPlay(_data['item_app']['name']);
                 }

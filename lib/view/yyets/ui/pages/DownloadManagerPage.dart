@@ -8,11 +8,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:bill/view/yyets/ui/widgets/ink_con_button.dart';
 import 'package:bill/view/yyets/ui/widgets/visibility.dart';
 import 'package:bill/view/yyets/ui/widgets/wrapped_material_dialog.dart';
-import 'package:bill/view/yyets/utils/RRResManager.dart';
 import 'package:bill/view/yyets/utils/constants.dart';
 import 'package:bill/view/yyets/utils/mysp.dart';
 import 'package:bill/view/yyets/utils/toast.dart';
 import 'package:bill/view/yyets/utils/tools.dart';
+import 'package:fyyets_dl2/RRResManager.dart';
 import 'package:material_dialog/material_dialog.dart';
 
 class DownloadManagerPage extends StatefulWidget {
