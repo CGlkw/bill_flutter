@@ -32,10 +32,17 @@ Future<List<Bill>> decodeBill() async {
 class BillService{
   final int pageSize = 10;
 
+  Future<bool> addBill(Bill bill) async {
+    List<Bill> bills= await decodeBill();
+    bills.add(bill);
+    billDate = bills;
+    print('添加成功，bill:$bill');
+    return true;
+  }
   
   Future<List<Bill>> getBillList({page:1}) async {
     List<Bill> bills= await decodeBill();
-    
+    bills.sort((a, b) => -a.time.compareTo(b.time));
     int start = (page - 1 ) * pageSize;
     int end = page * pageSize;
 

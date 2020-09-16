@@ -1,7 +1,12 @@
 
 import 'package:bill/common/BillIcon.dart';
+import 'package:bill/view/add/component/Test.dart';
+import 'package:bill/view/api/BillService.dart';
+import 'package:bill/view/api/module/Bill.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'component/AddKeyBord.dart';
 
 class BillAdd extends StatefulWidget{
   @override
@@ -52,16 +57,12 @@ class _BillAddState extends State<BillAdd>{
         )
       )
     );
-    
   }
 
-  Widget _buildBottomSheet() => BottomSheet(
-    onClosing: () => {selectIndex = -1}, 
-    builder: (_) => (Container(
-        height: 300.0,
-        child: selectIndex != -1? Icon(BillIcons.all[icon[selectIndex]['icon']],size: 40,) : null,
-    ))
-  );
+  _onSubmit(Bill bill){
+    BillService().addBill(bill);
+
+  }
 
   _iconInit(){
     int i = 0;
@@ -69,17 +70,27 @@ class _BillAddState extends State<BillAdd>{
       iconButtons.add(
         InkWell(
           onTap: () {
-            selectIndex = i;
-            isShow = !isShow;
-            isShow ?Scaffold.of(_context).showBottomSheet((context) => _buildBottomSheet()) : Navigator.of(_context).pop();
+            //Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestHero(element)));
+            showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return  AddKeyBord(
+                  name:element,
+                  controller: TextEditingController(),
+                  onSubmit: _onSubmit,
+                );
+              },
+            ).then((val) {
+            });
           },
           child:Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(BillIcons.all[element['icon']],size: 40,),
+              Hero(tag:element['icon'],child: Icon(BillIcons.all[element['icon']],size: 40,)),
               Text(element['name'])
             ]
           ),
+
         )
       );
       i++;

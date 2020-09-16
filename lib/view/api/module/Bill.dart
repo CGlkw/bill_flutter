@@ -19,6 +19,12 @@ class Bill{
       money: double.parse(json['money'])
     );
   }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'type:$type, time:$time, money:$money;\n';
+  }
 }
 
 class BillChartDate{

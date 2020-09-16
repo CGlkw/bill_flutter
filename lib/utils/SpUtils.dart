@@ -10,4 +10,14 @@ class SpUtils {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setStringList(key, list);
   }
+
+  static setStr(String key, String str) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(key, str);
+  }
+
+  static getStr(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
 }

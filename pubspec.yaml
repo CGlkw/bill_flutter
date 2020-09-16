@@ -63,6 +63,7 @@ dependencies:
   ## webview_flutter: ^0.3.22
   material_dialog: ^0.0.9
   share: ^0.6.3+6
+  #flutter_echarts: #latest version
 
 dev_dependencies:
   flutter_test:

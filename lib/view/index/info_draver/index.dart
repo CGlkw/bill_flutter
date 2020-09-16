@@ -1,5 +1,6 @@
 import 'package:bill/view/comment/index.dart';
 import 'package:bill/view/maomi/player/playui.dart';
+import 'package:bill/view/mian/charts/TestEcharts.dart';
 import 'package:bill/view/slivers/SliversPage.dart';
 import 'package:bill/view/slivers/TestPage.dart';
 import 'package:bill/view/staggeredGridView/index.dart';
@@ -67,6 +68,7 @@ class MyDrawer extends StatelessWidget {
                         title: Text('PullToRefreshDemo'),
                         onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => LoadMoreDemo())),
                       ),
+
                     ],
                   ),
                 ),
