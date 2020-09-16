@@ -35,12 +35,13 @@ class _BillAddState extends State<BillAdd>{
 
   @override
   void initState() {
-    _iconInit();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _iconInit();
+
     _context = context;
     return Scaffold(
       appBar: AppBar(
@@ -68,32 +69,80 @@ class _BillAddState extends State<BillAdd>{
     int i = 0;
     icon.forEach((element) {
       iconButtons.add(
-        InkWell(
-          onTap: () {
-            //Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestHero(element)));
-            showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return  AddKeyBord(
-                  name:element,
-                  controller: TextEditingController(),
-                  onSubmit: _onSubmit,
-                );
-              },
-            ).then((val) {
-            });
-          },
-          child:Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Hero(tag:element['icon'],child: Icon(BillIcons.all[element['icon']],size: 40,)),
-              Text(element['name'])
-            ]
-          ),
-
+        Stack(
+          children: [
+            _buildIcon(element),
+            Positioned(
+                right: 22.0,
+                top: 12.0,
+              child:Container(
+                width: 18,
+                height: 18,
+                child: InkWell(
+                  child: Center(
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 16,
+                    )
+                  ),
+                  onTap: (){
+                    print(111);
+                  },
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: new BorderRadius.all(
+                    const Radius.circular(18.0),
+                  ),
+                ),
+              )
+            )
+          ],
         )
       );
       i++;
     });
+  }
+
+  Widget _buildIcon(element){
+    return Center(
+      child: Material(
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius:BorderRadius.circular(60) ,
+            color: Theme.of(context).primaryColorLight,
+          ),
+          child: InkWell(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return  AddKeyBord(
+                    name:element,
+                    controller: TextEditingController(),
+                    onSubmit: _onSubmit,
+                  );
+                },
+              );
+            },
+            child:Container(
+              width: 70,
+              height: 70,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Hero(tag:element['icon'],child: Icon(BillIcons.all[element['icon']],size: 40,)),
+                    Text(element['name'])
+                  ]
+              ),
+
+            ),
+            borderRadius:BorderRadius.circular(70) ,
+            radius: 70.0,
+          ),
+        ),
+      ),
+    );
   }
 }
