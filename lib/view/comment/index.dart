@@ -1,8 +1,8 @@
 
+import 'package:bill/api/CommentService.dart';
 import 'package:bill/models/OscProjectCommentRefer.dart';
 import 'package:bill/models/comment.dart';
 import 'package:bill/utils/StringUtils.dart';
-import 'package:bill/view/api/CommentService.dart';
 import 'package:bill/view/comment/CommentItem.dart';
 import 'package:bill/view/comment/CommentReferWidget.dart';
 import 'package:flutter/material.dart';

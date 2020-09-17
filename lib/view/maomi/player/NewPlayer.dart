@@ -1,19 +1,14 @@
 
 import 'dart:ui';
 
+import 'package:bill/api/HostListService.dart';
+import 'package:bill/api/module/Bill.dart';
 import 'package:bill/common/KPlayer.dart';
 import 'package:bill/models/comment.dart';
 import 'package:bill/models/vedioDetail.dart';
-import 'package:bill/utils/StringUtils.dart';
-import 'package:bill/view/api/CommentService.dart';
-import 'package:bill/view/api/HostListService.dart';
-import 'package:bill/view/api/module/Bill.dart';
-import 'package:bill/view/comment/index.dart';
 import 'package:bill/view/maomi/comment/CommentItem.dart';
 import 'package:bill/view/maomi/comment/NewCommentPage.dart';
-import 'package:bill/view/maomi/comment/index.dart';
 import 'package:bill/view/maomi/userInfo/NewUserInfo.dart';
-import 'package:bill/view/maomi/userInfo/UserInfo.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart' hide NestedScrollView, NestedScrollViewState;
 

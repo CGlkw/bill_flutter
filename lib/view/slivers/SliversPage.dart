@@ -1,12 +1,11 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:bill/api/CommentService.dart';
+import 'package:bill/api/module/Bill.dart';
 import 'package:bill/common/BillPlayer.dart';
 import 'package:bill/common/SlideButton.dart';
 import 'package:bill/models/comment.dart';
-import 'package:bill/view/api/BillService.dart';
-import 'package:bill/view/api/CommentService.dart';
-import 'package:bill/view/api/module/Bill.dart';
 import 'package:bill/view/comment/CommentItem.dart';
 import 'package:bill/view/comment/index.dart';
 import 'package:flutter/material.dart';

@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:bill/api/module/Bill.dart';
 import 'package:bill/utils/TimeMachineUtil.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/services.dart';
-import 'package:bill/view/api/module/Bill.dart';
 
 List<Bill> billDate;
 

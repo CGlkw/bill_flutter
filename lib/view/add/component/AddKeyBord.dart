@@ -1,14 +1,14 @@
+import 'package:bill/api/module/Bill.dart';
 import 'package:bill/common/BillIcon.dart';
-import 'package:bill/view/api/module/Bill.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
-
+import 'package:bill/api/module/BillType.dart';
 import 'DateSelect.dart';
 
 class AddKeyBord extends StatefulWidget{
 
-  Map name;
+  BillType name;
   TextEditingController controller;
   Function onSubmit;
 
@@ -63,16 +63,16 @@ class AddKeyBordState extends State<AddKeyBord>{
             child: Row(
               children: [
                 Hero(
-                    tag: widget.name['icon'],
+                    tag: widget.name.icon,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8, right: 8),
-                      child: Icon(BillIcons.all[widget.name['icon']],size: 22,
+                      child: Icon(BillIcons.all[widget.name.icon],size: 22,
                         color: Theme.of(context).primaryColor,
                       ),
                     ),
                 ),
                 Text(
-                  widget.name['name'],
+                  widget.name.type,
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                 ),
               ],
@@ -195,9 +195,9 @@ class AddKeyBordState extends State<AddKeyBord>{
                               if (value != '' && value !=null) {
                                 Bill bill = new Bill();
                                 bill.id = bill.hashCode;
-                                bill.icon = widget.name['icon'];
-                                bill.type = widget.name['name'];
-                                bill.remark = widget.name['name'];
+                                bill.icon = widget.name.icon;
+                                bill.type = widget.name.type;
+                                bill.remark = widget.name.type;
                                 bill.money = double.parse(value);
                                 bill.time = initialDate;
                                 widget.onSubmit(bill);

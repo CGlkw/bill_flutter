@@ -1,7 +1,6 @@
 
+import 'package:bill/api/HostListService.dart';
 import 'package:bill/models/comment.dart';
-import 'package:bill/view/api/CommentService.dart';
-import 'package:bill/view/api/HostListService.dart';
 import 'package:bill/view/maomi/comment/CommentItem.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';

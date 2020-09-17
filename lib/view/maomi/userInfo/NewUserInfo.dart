@@ -2,17 +2,12 @@
 
 import 'dart:ui';
 
-import 'package:bill/common/KSliverAppBar.dart';
+import 'package:bill/api/HostListService.dart';
 import 'package:bill/models/momiUser.dart';
 import 'package:bill/models/userVideoList.dart';
-import 'package:bill/models/vedioList.dart';
-import 'package:bill/utils/StringUtils.dart';
-import 'package:bill/view/api/HostListService.dart';
-import 'package:bill/view/api/module/Bill.dart';
 import 'package:bill/view/maomi/player/playui.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';

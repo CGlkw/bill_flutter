@@ -1,7 +1,7 @@
+import 'package:bill/api/BillService.dart';
+import 'package:bill/api/module/Bill.dart';
 import 'package:flutter/material.dart';
 import 'package:bill/view/Pages.dart';
-import 'package:bill/view/api/BillService.dart';
-import 'package:bill/view/api/module/Bill.dart';
 import 'package:bill/common/SlideButton.dart';
 
 class BillListPage extends Pages{

@@ -1,13 +1,9 @@
 import 'dart:ui';
 
+import 'package:bill/api/HostListService.dart';
 import 'package:bill/common/BillPlayer.dart';
 import 'package:bill/models/vedioDetail.dart';
-import 'package:bill/utils/StringUtils.dart';
-import 'package:bill/view/api/HostListService.dart';
-import 'package:bill/view/maomi/comment/index.dart';
 import 'package:bill/view/maomi/player/NewPlayer.dart';
-import 'package:bill/view/maomi/userInfo/UserInfo.dart';
-import 'package:bill/view/slivers/TestPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
